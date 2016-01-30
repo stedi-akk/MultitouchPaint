@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Multitouch Paint</string>
+    <string name="exit_application">Exit Application ?</string>
+    <string name="new_file">New file</string>
+    <string name="open">Open</string>
+    <string name="save">Save</string>
+    <string name="cant_save_image">Can\'t save image</string>
+    <string name="failed_to_save_image">Failed to save image</string>
+    <string name="image_successfully_saved">Image successfully saved to Pictures</string>
+    <string name="failed_to_load_image">Failed to load image</string>
+</resources>

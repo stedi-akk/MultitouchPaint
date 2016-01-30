@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="brush_color_dialog_width">220dp</dimen>
+    <dimen name="brush_thickness_dialog_width">250dp</dimen>
+    <dimen name="file_work_dialog_width">130dp</dimen>
+    <dimen name="exit_dialog_width">180dp</dimen>
+</resources>

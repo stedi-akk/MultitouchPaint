@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="@dimen/file_work_dialog_width"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/file_work_dialog_new_file"
+            style="@style/FileWorkDialogButton"
+            android:text="@string/new_file" />
+
+        <TextView
+            android:id="@+id/file_work_dialog_open"
+            style="@style/FileWorkDialogButton"
+            android:text="@string/open" />
+
+        <TextView
+            android:id="@+id/file_work_dialog_save"
+            style="@style/FileWorkDialogButton"
+            android:text="@string/save" />
+
+    </LinearLayout>
+</FrameLayout>

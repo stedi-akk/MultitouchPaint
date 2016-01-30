@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="@dimen/brush_color_dialog_width"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.github.danielnilsson9.colorpickerview.view.ColorPickerView
+            android:id="@+id/brush_color_dialog_color_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:alphaChannelVisible="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <com.github.danielnilsson9.colorpickerview.view.ColorPanelView
+                android:id="@+id/brush_color_dialog_color_from"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp" />
+
+            <com.github.danielnilsson9.colorpickerview.view.ColorPanelView
+                android:id="@+id/brush_color_dialog_color_to"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:layout_marginBottom="5dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <include layout="@layout/done_cancel_buttons" />
+
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

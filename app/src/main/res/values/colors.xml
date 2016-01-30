@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="material_shadow">#34000000</color>
+    <color name="main_selector">#E0E0E0</color>
+    <color name="dark_gray">#212121</color>
+    <color name="medium_gray">#9E9E9E</color>
+</resources>
