@@ -150,7 +150,11 @@ public class CanvasView extends View {
 
     public void setPicture(Bitmap bitmap) {
         clearPicture();
-        oldBitmap = Bitmap.createScaledBitmap(bitmap, getWidth(), getHeight(), true);
+
+        cachedOldBitmap = Bitmap.createScaledBitmap(bitmap, getWidth(), getHeight(), true);
+        cachedOldCanvas = new Canvas(cachedOldBitmap);
+        oldBitmap = cachedOldBitmap.copy(Bitmap.Config.ARGB_8888, false);
+
         invalidate();
     }
 
