@@ -152,6 +152,8 @@ public class CanvasView extends View {
         clearPicture();
 
         cachedOldBitmap = Bitmap.createScaledBitmap(bitmap, getWidth(), getHeight(), true);
+        if (!cachedOldBitmap.isMutable())
+            cachedOldBitmap = cachedOldBitmap.copy(Bitmap.Config.ARGB_8888, true);
         cachedOldCanvas = new Canvas(cachedOldBitmap);
         oldBitmap = cachedOldBitmap.copy(Bitmap.Config.ARGB_8888, false);
 
