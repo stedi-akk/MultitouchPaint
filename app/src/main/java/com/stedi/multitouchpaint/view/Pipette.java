@@ -6,24 +6,25 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-import com.stedi.multitouchpaint.AppUtils;
+import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.R;
+import com.stedi.multitouchpaint.Utils;
 import com.stedi.multitouchpaint.data.Pointer;
 
 /**
  * Part of {@link com.stedi.multitouchpaint.view.CanvasView}
  */
 class Pipette {
-    private final float headRadius = AppUtils.dp2px(25);
-    private final float needleLength = AppUtils.dp2px(50);
-    private final float needleEnlargement = AppUtils.dp2px(8);
-    private final float innerRadius = AppUtils.dp2px(20);
-    private final float innerStrokeWidth = AppUtils.dp2px(0.5f);
-    private final float shadowWidth = AppUtils.dp2px(2);
+    private final float headRadius = Utils.dp2px(25);
+    private final float needleLength = Utils.dp2px(50);
+    private final float needleEnlargement = Utils.dp2px(8);
+    private final float innerRadius = Utils.dp2px(20);
+    private final float innerStrokeWidth = Utils.dp2px(0.5f);
+    private final float shadowWidth = Utils.dp2px(2);
 
     private final int fillColor = Color.WHITE;
-    private final int shadowColor = AppUtils.getRes().getColor(R.color.material_shadow);
-    private final int innerStrokeColor = AppUtils.getRes().getColor(R.color.medium_gray);
+    private final int shadowColor = App.getContext().getResources().getColor(R.color.material_shadow);
+    private final int innerStrokeColor = App.getContext().getResources().getColor(R.color.medium_gray);
 
     private Bitmap bitmap;
     private Pointer pointer;

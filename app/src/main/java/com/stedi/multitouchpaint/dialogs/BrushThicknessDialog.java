@@ -7,17 +7,24 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.stedi.multitouchpaint.AppUtils;
+import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.Config;
 import com.stedi.multitouchpaint.R;
+import com.stedi.multitouchpaint.Utils;
 
 public class BrushThicknessDialog extends BaseDialog implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
-    public static final String RESULT_KEY_THICKNESS = "result_key_thickness";
-
     private static final String INSTANCE_KEY_FROM_THICKNESS = "instance_key_from_thickness";
 
     private TextView tvThicknessTo;
     private int thickness;
+
+    public class CallbackEvent {
+        public int thickness;
+
+        public CallbackEvent(int thickness) {
+            this.thickness = thickness;
+        }
+    }
 
     public static BrushThicknessDialog newInstance(int fromThickness) {
         Bundle args = new Bundle();
@@ -40,9 +47,9 @@ public class BrushThicknessDialog extends BaseDialog implements View.OnClickList
         seekBar.setOnSeekBarChangeListener(this);
 
         TextView tvThicknessFrom = (TextView) root.findViewById(R.id.brush_thickness_dialog_thickness_from);
-        tvThicknessFrom.setText(AppUtils.getThicknessText(fromThickness));
+        tvThicknessFrom.setText(Utils.getThicknessText(fromThickness));
         tvThicknessTo = (TextView) root.findViewById(R.id.brush_thickness_dialog_thickness_to);
-        tvThicknessTo.setText(AppUtils.getThicknessText(fromThickness));
+        tvThicknessTo.setText(Utils.getThicknessText(fromThickness));
 
         root.findViewById(R.id.done).setOnClickListener(this);
         root.findViewById(R.id.cancel).setOnClickListener(this);
@@ -51,18 +58,15 @@ public class BrushThicknessDialog extends BaseDialog implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.done) {
-            Bundle args = new Bundle();
-            args.putInt(RESULT_KEY_THICKNESS, thickness);
-            setResult(args);
-        }
+        if (v.getId() == R.id.done)
+            App.getBus().post(new CallbackEvent(thickness));
         dismiss();
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         thickness = progress + 1;
-        tvThicknessTo.setText(AppUtils.getThicknessText(thickness));
+        tvThicknessTo.setText(Utils.getThicknessText(thickness));
     }
 
     @Override

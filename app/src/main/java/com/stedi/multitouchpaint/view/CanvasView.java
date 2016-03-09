@@ -10,8 +10,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.stedi.multitouchpaint.AppUtils;
+import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.Config;
+import com.stedi.multitouchpaint.Utils;
 import com.stedi.multitouchpaint.data.HistoryItem;
 import com.stedi.multitouchpaint.data.Pointer;
 
@@ -34,7 +35,7 @@ public class CanvasView extends View {
 
     private boolean pipetteMode;
 
-    private float brushThickness = AppUtils.dp2px(Config.DEFAULT_BRUSH_THICKNESS);
+    private float brushThickness = Utils.dp2px(Config.DEFAULT_BRUSH_THICKNESS);
     private int brushColor = Config.DEFAULT_BRUSH_COLOR;
 
     public CanvasView(Context context) {
@@ -107,7 +108,7 @@ public class CanvasView extends View {
     }
 
     public void setBrushThickness(int brushThickness) {
-        this.brushThickness = AppUtils.dp2px(brushThickness);
+        this.brushThickness = Utils.dp2px(brushThickness);
     }
 
     // because color can be changed with pipette

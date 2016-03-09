@@ -5,12 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.otto.Bus;
+import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.R;
 
 public class FileWorkDialog extends BaseDialog implements View.OnClickListener {
-    public static final String RESULT_KEY_NEW_FILE = "result_key_new_file";
-    public static final String RESULT_KEY_OPEN = "result_key_open";
-    public static final String RESULT_KEY_SAVE = "result_key_save";
+    public enum CallbackEvent {
+        ON_NEW_FILE,
+        ON_OPEN,
+        ON_SAVE
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -23,19 +27,18 @@ public class FileWorkDialog extends BaseDialog implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Bundle args = new Bundle();
+        Bus bus = App.getBus();
         switch (v.getId()) {
             case R.id.file_work_dialog_new_file:
-                args.putBoolean(RESULT_KEY_NEW_FILE, true);
+                bus.post(CallbackEvent.ON_NEW_FILE);
                 break;
             case R.id.file_work_dialog_open:
-                args.putBoolean(RESULT_KEY_OPEN, true);
+                bus.post(CallbackEvent.ON_OPEN);
                 break;
             case R.id.file_work_dialog_save:
-                args.putBoolean(RESULT_KEY_SAVE, true);
+                bus.post(CallbackEvent.ON_SAVE);
                 break;
         }
-        setResult(args);
         dismiss();
     }
 }

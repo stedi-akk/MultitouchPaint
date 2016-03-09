@@ -7,15 +7,22 @@ import android.view.ViewGroup;
 
 import com.github.danielnilsson9.colorpickerview.view.ColorPanelView;
 import com.github.danielnilsson9.colorpickerview.view.ColorPickerView;
+import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.Config;
 import com.stedi.multitouchpaint.R;
 
 public class BrushColorDialog extends BaseDialog implements View.OnClickListener, ColorPickerView.OnColorChangedListener {
-    public static final String RESULT_KEY_COLOR = "result_key_color";
-
     private static final String INSTANCE_KEY_FROM_COLOR = "instance_key_from_color";
 
     private ColorPanelView colorTo;
+
+    public class CallbackEvent {
+        public int color;
+
+        public CallbackEvent(int color) {
+            this.color = color;
+        }
+    }
 
     public static BrushColorDialog newInstance(int fromColor) {
         Bundle args = new Bundle();
@@ -47,11 +54,8 @@ public class BrushColorDialog extends BaseDialog implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.done) {
-            Bundle args = new Bundle();
-            args.putInt(RESULT_KEY_COLOR, colorTo.getColor());
-            setResult(args);
-        }
+        if (v.getId() == R.id.done)
+            App.getBus().post(new CallbackEvent(colorTo.getColor()));
         dismiss();
     }
 

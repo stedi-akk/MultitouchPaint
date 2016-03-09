@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 
-import com.stedi.multitouchpaint.dialogs.BaseDialog;
+import com.squareup.otto.Subscribe;
 import com.stedi.multitouchpaint.dialogs.BrushColorDialog;
 import com.stedi.multitouchpaint.dialogs.BrushThicknessDialog;
 import com.stedi.multitouchpaint.dialogs.ExitDialog;
@@ -22,15 +22,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class MainActivity extends Activity implements WorkPanel.OnButtonsClickListener, BaseDialog.OnResult {
+// TODO debug version
+// TODO otto
+// TODO brush class
+// TODO butterknife
+public class MainActivity extends Activity {
     private final String KEY_BRUSH_COLOR = "key_brush_color";
     private final String KEY_BRUSH_THICKNESS = "key_brush_thickness";
 
-    private final int REQUEST_FILE_WORK = 111;
-    private final int REQUEST_BRUSH_COLOR = 112;
-    private final int REQUEST_BRUSH_THICKNESS = 113;
-    private final int REQUEST_EXIT = 114;
-    private final int REQUEST_LOAD_IMAGE = 115;
+    private final int REQUEST_LOAD_IMAGE = 111;
 
     private CanvasView canvasView;
     private WorkPanel workPanel;
@@ -41,10 +41,11 @@ public class MainActivity extends Activity implements WorkPanel.OnButtonsClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.getBus().register(this);
+
         setContentView(R.layout.main_activity);
         canvasView = (CanvasView) findViewById(R.id.main_activity_canvas_view);
         workPanel = (WorkPanel) findViewById(R.id.main_activity_work_panel);
-        workPanel.setOnButtonsClickListener(this);
 
         if (savedInstanceState != null) {
             brushColor = savedInstanceState.getInt(KEY_BRUSH_COLOR, Config.DEFAULT_BRUSH_COLOR);
@@ -65,6 +66,12 @@ public class MainActivity extends Activity implements WorkPanel.OnButtonsClickLi
     }
 
     @Override
+    protected void onDestroy() {
+        App.getBus().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
     public void onBackPressed() {
         if (canvasView.isPipetteMode()) {
             canvasView.disablePipette();
@@ -79,76 +86,64 @@ public class MainActivity extends Activity implements WorkPanel.OnButtonsClickLi
             workPanel.show();
     }
 
-    @Override
-    public void onFileWorkClick() {
+    @Subscribe
+    public void onWorkPanelEvent(WorkPanel.CallbackEvent event) {
         if (canvasView.isDrawing())
             return;
-        new FileWorkDialog().showForResult(this, REQUEST_FILE_WORK);
-    }
-
-    @Override
-    public void onPipetteClick() {
-        if (canvasView.isDrawing())
-            return;
-        canvasView.activatePipette();
-        workPanel.hide();
-    }
-
-    @Override
-    public void onColorClick() {
-        if (canvasView.isDrawing())
-            return;
-        BrushColorDialog.newInstance(brushColor).showForResult(this, REQUEST_BRUSH_COLOR);
-    }
-
-    @Override
-    public void onThicknessClick() {
-        if (canvasView.isDrawing())
-            return;
-        BrushThicknessDialog.newInstance(brushThickness).showForResult(this, REQUEST_BRUSH_THICKNESS);
-    }
-
-    @Override
-    public void onUndoClick() {
-        if (canvasView.isDrawing())
-            return;
-        canvasView.undo();
-    }
-
-    @Override
-    public void onExitClick() {
-        if (canvasView.isDrawing())
-            return;
-        new ExitDialog().showForResult(this, REQUEST_EXIT);
-    }
-
-    @Override
-    public void onDialogResult(int requestCode, Bundle args) {
-        switch (requestCode) {
-            case REQUEST_FILE_WORK:
-                if (args.containsKey(FileWorkDialog.RESULT_KEY_NEW_FILE)) {
-                    canvasView.clearPicture();
-                } else if (args.containsKey(FileWorkDialog.RESULT_KEY_OPEN)) {
-                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(intent, REQUEST_LOAD_IMAGE);
-                } else if (args.containsKey(FileWorkDialog.RESULT_KEY_SAVE)) {
-                    saveBitmapAsPicture(canvasView.generatePicture());
-                }
+        switch (event) {
+            case ON_FILE_WORK_CLICK:
+                new FileWorkDialog().show(getFragmentManager(), FileWorkDialog.class.getName());
                 break;
-            case REQUEST_BRUSH_COLOR:
-                brushColor = args.getInt(BrushColorDialog.RESULT_KEY_COLOR, Config.DEFAULT_BRUSH_COLOR);
-                canvasView.setBrushColor(brushColor);
-                workPanel.setBrushColor(brushColor);
+            case ON_PIPETTE_CLICK:
+                canvasView.activatePipette();
+                workPanel.hide();
                 break;
-            case REQUEST_BRUSH_THICKNESS:
-                brushThickness = args.getInt(BrushThicknessDialog.RESULT_KEY_THICKNESS, Config.DEFAULT_BRUSH_THICKNESS);
-                canvasView.setBrushThickness(brushThickness);
-                workPanel.setBrushThickness(brushThickness);
+            case ON_COLOR_CLICK:
+                BrushColorDialog.newInstance(brushColor).show(getFragmentManager(), BrushColorDialog.class.getName());
                 break;
-            case REQUEST_EXIT:
-                finish();
+            case ON_THICKNESS_CLICK:
+                BrushThicknessDialog.newInstance(brushThickness).show(getFragmentManager(), BrushThicknessDialog.class.getName());
+                break;
+            case ON_UNDO_CLICK:
+                canvasView.undo();
+                break;
+            case ON_EXIT_CLICK:
+                new ExitDialog().show(getFragmentManager(), ExitDialog.class.getName());
                 break;
         }
+    }
+
+    @Subscribe
+    public void onFileWorkDialogEvent(FileWorkDialog.CallbackEvent event) {
+        switch (event) {
+            case ON_NEW_FILE:
+                canvasView.clearPicture();
+                break;
+            case ON_OPEN:
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, REQUEST_LOAD_IMAGE);
+                break;
+            case ON_SAVE:
+                saveBitmapAsPicture(canvasView.generatePicture());
+                break;
+        }
+    }
+
+    @Subscribe
+    public void onBrushColorDialogEvent(BrushColorDialog.CallbackEvent event) {
+        canvasView.setBrushColor(event.color);
+        workPanel.setBrushColor(event.color);
+    }
+
+    @Subscribe
+    public void onBrushThicknessDialogEvent(BrushThicknessDialog.CallbackEvent event) {
+        canvasView.setBrushThickness(event.thickness);
+        workPanel.setBrushThickness(event.thickness);
+    }
+
+    @Subscribe
+    public void onExitDialogEvent(ExitDialog.CallbackEvent event) {
+        finish();
     }
 
     @Override
@@ -194,7 +189,7 @@ public class MainActivity extends Activity implements WorkPanel.OnButtonsClickLi
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        AppUtils.showToast(resultToastMessage);
+                        Utils.showToast(resultToastMessage);
                     }
                 });
             }
@@ -220,7 +215,7 @@ public class MainActivity extends Activity implements WorkPanel.OnButtonsClickLi
                         if (bitmap != null)
                             canvasView.setPicture(bitmap);
                         if (failedToLoad)
-                            AppUtils.showToast(R.string.failed_to_load_image);
+                            Utils.showToast(R.string.failed_to_load_image);
                     }
                 });
             }

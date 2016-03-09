@@ -10,28 +10,24 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.github.danielnilsson9.colorpickerview.view.ColorPanelView;
-import com.stedi.multitouchpaint.AppUtils;
+import com.squareup.otto.Bus;
+import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.R;
+import com.stedi.multitouchpaint.Utils;
 
 public class WorkPanel extends FrameLayout implements View.OnClickListener {
-    private OnButtonsClickListener listener;
     private Visibility visibility = Visibility.SHOWN;
 
     private ColorPanelView colorHolder;
     private TextView tvThickness;
 
-    public interface OnButtonsClickListener {
-        void onFileWorkClick();
-
-        void onPipetteClick();
-
-        void onColorClick();
-
-        void onThicknessClick();
-
-        void onUndoClick();
-
-        void onExitClick();
+    public enum CallbackEvent {
+        ON_FILE_WORK_CLICK,
+        ON_PIPETTE_CLICK,
+        ON_COLOR_CLICK,
+        ON_THICKNESS_CLICK,
+        ON_UNDO_CLICK,
+        ON_EXIT_CLICK
     }
 
     private enum Visibility {
@@ -61,40 +57,35 @@ public class WorkPanel extends FrameLayout implements View.OnClickListener {
         findViewById(R.id.work_panel_exit).setOnClickListener(this);
     }
 
-    public void setOnButtonsClickListener(OnButtonsClickListener listener) {
-        this.listener = listener;
-    }
-
     public void setBrushColor(int color) {
         colorHolder.setColor(color);
     }
 
     public void setBrushThickness(int thickness) {
-        tvThickness.setText(AppUtils.getThicknessText(thickness));
+        tvThickness.setText(Utils.getThicknessText(thickness));
     }
 
     @Override
     public void onClick(View v) {
-        if (listener == null)
-            return;
+        Bus bus = App.getBus();
         switch (v.getId()) {
             case R.id.work_panel_file_work:
-                listener.onFileWorkClick();
+                bus.post(CallbackEvent.ON_FILE_WORK_CLICK);
                 break;
             case R.id.work_panel_pipette:
-                listener.onPipetteClick();
+                bus.post(CallbackEvent.ON_PIPETTE_CLICK);
                 break;
             case R.id.work_panel_color:
-                listener.onColorClick();
+                bus.post(CallbackEvent.ON_COLOR_CLICK);
                 break;
             case R.id.work_panel_thickness:
-                listener.onThicknessClick();
+                bus.post(CallbackEvent.ON_THICKNESS_CLICK);
                 break;
             case R.id.work_panel_undo:
-                listener.onUndoClick();
+                bus.post(CallbackEvent.ON_UNDO_CLICK);
                 break;
             case R.id.work_panel_exit:
-                listener.onExitClick();
+                bus.post(CallbackEvent.ON_EXIT_CLICK);
                 break;
         }
     }
