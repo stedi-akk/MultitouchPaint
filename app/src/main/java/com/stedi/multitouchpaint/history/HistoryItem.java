@@ -1,4 +1,4 @@
-package com.stedi.multitouchpaint.data;
+package com.stedi.multitouchpaint.history;
 
 import android.graphics.Path;
 

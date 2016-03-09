@@ -19,9 +19,9 @@ public class BrushThicknessDialog extends BaseDialog implements View.OnClickList
     private int thickness;
 
     public class CallbackEvent {
-        public int thickness;
+        public final int thickness;
 
-        public CallbackEvent(int thickness) {
+        private CallbackEvent(int thickness) {
             this.thickness = thickness;
         }
     }

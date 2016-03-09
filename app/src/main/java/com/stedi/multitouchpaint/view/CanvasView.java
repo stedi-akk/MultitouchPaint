@@ -10,11 +10,10 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.Config;
 import com.stedi.multitouchpaint.Utils;
-import com.stedi.multitouchpaint.data.HistoryItem;
-import com.stedi.multitouchpaint.data.Pointer;
+import com.stedi.multitouchpaint.history.HistoryItem;
+import com.stedi.multitouchpaint.history.Pointer;
 
 import java.util.ArrayList;
 import java.util.HashMap;

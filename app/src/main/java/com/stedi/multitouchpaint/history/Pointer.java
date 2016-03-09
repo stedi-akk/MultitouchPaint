@@ -1,4 +1,4 @@
-package com.stedi.multitouchpaint.data;
+package com.stedi.multitouchpaint.history;
 
 public class Pointer {
     private float x;

@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.squareup.otto.Bus;
 
-public final class App extends Application {
+public class App extends Application {
     private static App instance;
 
     private Bus bus;

@@ -17,9 +17,9 @@ public class BrushColorDialog extends BaseDialog implements View.OnClickListener
     private ColorPanelView colorTo;
 
     public class CallbackEvent {
-        public int color;
+        public final int color;
 
-        public CallbackEvent(int color) {
+        private CallbackEvent(int color) {
             this.color = color;
         }
     }

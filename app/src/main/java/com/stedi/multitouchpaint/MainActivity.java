@@ -3,24 +3,18 @@ package com.stedi.multitouchpaint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 
 import com.squareup.otto.Subscribe;
+import com.stedi.multitouchpaint.background.BitmapSaver;
+import com.stedi.multitouchpaint.background.GalleryBitmapGetter;
 import com.stedi.multitouchpaint.dialogs.BrushColorDialog;
 import com.stedi.multitouchpaint.dialogs.BrushThicknessDialog;
 import com.stedi.multitouchpaint.dialogs.ExitDialog;
 import com.stedi.multitouchpaint.dialogs.FileWorkDialog;
 import com.stedi.multitouchpaint.view.CanvasView;
 import com.stedi.multitouchpaint.view.WorkPanel;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 // TODO debug version
 // TODO otto
@@ -86,6 +80,13 @@ public class MainActivity extends Activity {
             workPanel.show();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_LOAD_IMAGE) {
+            new GalleryBitmapGetter(data).start();
+        }
+    }
+
     @Subscribe
     public void onWorkPanelEvent(WorkPanel.CallbackEvent event) {
         if (canvasView.isDrawing())
@@ -124,7 +125,7 @@ public class MainActivity extends Activity {
                 startActivityForResult(intent, REQUEST_LOAD_IMAGE);
                 break;
             case ON_SAVE:
-                saveBitmapAsPicture(canvasView.generatePicture());
+                new BitmapSaver(canvasView.generatePicture()).start();
                 break;
         }
     }
@@ -146,79 +147,27 @@ public class MainActivity extends Activity {
         finish();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == REQUEST_LOAD_IMAGE) {
-            getBitmapFromGallery(data);
+    @Subscribe
+    public void onBitmapSaverEvent(BitmapSaver.CallbackEvent event) {
+        switch (event) {
+            case BITMAP_SAVED:
+                Utils.showToast(R.string.image_successfully_saved);
+                break;
+            case FAILED_TO_SAVE:
+                Utils.showToast(R.string.failed_to_save_image);
+                break;
+            case CANT_SAVE:
+                Utils.showToast(R.string.cant_save_image);
+                break;
         }
     }
 
-    private void saveBitmapAsPicture(final Bitmap bitmap) {
-        new Thread(new Runnable() {
-            private int resultToastMessage;
-
-            @Override
-            public void run() {
-                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                    File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                    boolean dirAvailable = dir.exists();
-                    if (!dirAvailable)
-                        dirAvailable = dir.mkdirs();
-                    if (dirAvailable) {
-                        String fileName = Config.FILE_NAME_PREFIX + System.currentTimeMillis() + ".png";
-                        File file = new File(dir, fileName);
-                        try {
-                            FileOutputStream fos = new FileOutputStream(file);
-                            if (bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)) {
-                                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
-                                resultToastMessage = R.string.image_successfully_saved;
-                            } else {
-                                resultToastMessage = R.string.failed_to_save_image;
-                            }
-                            fos.close();
-                        } catch (IOException e) {
-                            resultToastMessage = R.string.failed_to_save_image;
-                        }
-                    } else {
-                        resultToastMessage = R.string.cant_save_image;
-                    }
-                } else {
-                    resultToastMessage = R.string.cant_save_image;
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Utils.showToast(resultToastMessage);
-                    }
-                });
-            }
-        }).start();
-    }
-
-    private void getBitmapFromGallery(final Intent data) {
-        new Thread(new Runnable() {
-            private Bitmap bitmap;
-            private boolean failedToLoad;
-
-            @Override
-            public void run() {
-                try {
-                    bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData()));
-                } catch (FileNotFoundException | OutOfMemoryError e) {
-                    failedToLoad = true;
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (bitmap != null)
-                            canvasView.setPicture(bitmap);
-                        if (failedToLoad)
-                            Utils.showToast(R.string.failed_to_load_image);
-                    }
-                });
-            }
-        }).start();
+    @Subscribe
+    public void onGalleryBitmapGetterEvent(GalleryBitmapGetter.CallbackEvent event) {
+        Bitmap bitmap = event.bitmap;
+        if (bitmap != null)
+            canvasView.setPicture(bitmap);
+        else
+            Utils.showToast(R.string.failed_to_load_image);
     }
 }
