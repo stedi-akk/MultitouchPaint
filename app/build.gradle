@@ -8,8 +8,8 @@ android {
         applicationId "com.stedi.multitouchpaint"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 4
-        versionName "2.2"
+        versionCode 5
+        versionName "2.3"
     }
 
     signingConfigs {
@@ -24,6 +24,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-DBG"
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

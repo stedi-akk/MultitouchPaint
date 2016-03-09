@@ -87,6 +87,8 @@ public class WorkPanel extends FrameLayout implements View.OnClickListener {
             case R.id.work_panel_exit:
                 bus.post(CallbackEvent.ON_EXIT_CLICK);
                 break;
+            default:
+                break;
         }
     }
 

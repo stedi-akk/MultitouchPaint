@@ -16,10 +16,6 @@ import com.stedi.multitouchpaint.dialogs.FileWorkDialog;
 import com.stedi.multitouchpaint.view.CanvasView;
 import com.stedi.multitouchpaint.view.WorkPanel;
 
-// TODO debug version
-// TODO otto
-// TODO brush class
-// TODO butterknife
 public class MainActivity extends Activity {
     private final String KEY_BRUSH_COLOR = "key_brush_color";
     private final String KEY_BRUSH_THICKNESS = "key_brush_thickness";
@@ -111,6 +107,8 @@ public class MainActivity extends Activity {
             case ON_EXIT_CLICK:
                 new ExitDialog().show(getFragmentManager(), ExitDialog.class.getName());
                 break;
+            default:
+                break;
         }
     }
 
@@ -127,19 +125,23 @@ public class MainActivity extends Activity {
             case ON_SAVE:
                 new BitmapSaver(canvasView.generatePicture()).start();
                 break;
+            default:
+                break;
         }
     }
 
     @Subscribe
     public void onBrushColorDialogEvent(BrushColorDialog.CallbackEvent event) {
-        canvasView.setBrushColor(event.color);
-        workPanel.setBrushColor(event.color);
+        brushColor = event.color;
+        canvasView.setBrushColor(brushColor);
+        workPanel.setBrushColor(brushColor);
     }
 
     @Subscribe
     public void onBrushThicknessDialogEvent(BrushThicknessDialog.CallbackEvent event) {
-        canvasView.setBrushThickness(event.thickness);
-        workPanel.setBrushThickness(event.thickness);
+        brushThickness = event.thickness;
+        canvasView.setBrushThickness(brushThickness);
+        workPanel.setBrushThickness(brushThickness);
     }
 
     @Subscribe
@@ -158,6 +160,8 @@ public class MainActivity extends Activity {
                 break;
             case CANT_SAVE:
                 Utils.showToast(R.string.cant_save_image);
+                break;
+            default:
                 break;
         }
     }

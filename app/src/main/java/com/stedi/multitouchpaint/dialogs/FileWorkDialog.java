@@ -38,6 +38,8 @@ public class FileWorkDialog extends BaseDialog implements View.OnClickListener {
             case R.id.file_work_dialog_save:
                 bus.post(CallbackEvent.ON_SAVE);
                 break;
+            default:
+                break;
         }
         dismiss();
     }
