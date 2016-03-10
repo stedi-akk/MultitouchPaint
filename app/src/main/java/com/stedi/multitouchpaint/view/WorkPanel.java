@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.github.danielnilsson9.colorpickerview.view.ColorPanelView;
 import com.squareup.otto.Bus;
 import com.stedi.multitouchpaint.App;
+import com.stedi.multitouchpaint.history.Brush;
 import com.stedi.multitouchpaint.R;
-import com.stedi.multitouchpaint.Utils;
 
 public class WorkPanel extends FrameLayout implements View.OnClickListener {
     private Visibility visibility = Visibility.SHOWN;
@@ -57,12 +57,9 @@ public class WorkPanel extends FrameLayout implements View.OnClickListener {
         findViewById(R.id.work_panel_exit).setOnClickListener(this);
     }
 
-    public void setBrushColor(int color) {
-        colorHolder.setColor(color);
-    }
-
-    public void setBrushThickness(int thickness) {
-        tvThickness.setText(Utils.getThicknessText(thickness));
+    public void setBrush(Brush brush) {
+        colorHolder.setColor(brush.getColor());
+        tvThickness.setText(brush.getThicknessText());
     }
 
     @Override

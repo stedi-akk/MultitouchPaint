@@ -10,8 +10,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.stedi.multitouchpaint.App;
+import com.stedi.multitouchpaint.history.Brush;
 import com.stedi.multitouchpaint.Config;
-import com.stedi.multitouchpaint.Utils;
 import com.stedi.multitouchpaint.history.HistoryItem;
 import com.stedi.multitouchpaint.history.Pointer;
 
@@ -34,8 +35,7 @@ public class CanvasView extends View {
 
     private boolean pipetteMode;
 
-    private float brushThickness = Utils.dp2px(Config.DEFAULT_BRUSH_THICKNESS);
-    private int brushColor = Config.DEFAULT_BRUSH_COLOR;
+    private Brush brush;
 
     public CanvasView(Context context) {
         this(context, null);
@@ -102,17 +102,8 @@ public class CanvasView extends View {
         }
     }
 
-    public void setBrushColor(int brushColor) {
-        this.brushColor = brushColor;
-    }
-
-    public void setBrushThickness(int brushThickness) {
-        this.brushThickness = Utils.dp2px(brushThickness);
-    }
-
-    // because color can be changed with pipette
-    public int getBrushColor() {
-        return brushColor;
+    public void setBrush(Brush brush) {
+        this.brush = brush;
     }
 
     public void undo() {
@@ -186,7 +177,7 @@ public class CanvasView extends View {
         float y = event.getY(actionIndex);
 
         // new history and pointer item
-        HistoryItem item = new HistoryItem(brushColor, brushThickness);
+        HistoryItem item = new HistoryItem(brush);
         item.setStatus(HistoryItem.Status.ON_VIEW_CANVAS);
         history.add(item);
         pointerDownItems.put(pointerId, item);
@@ -337,7 +328,8 @@ public class CanvasView extends View {
         } else {
             bitmapForPipette.recycle();
             bitmapForPipette = null;
-            brushColor = pipette.getColor();
+            brush.setColor(pipette.getColor());
+            App.getBus().post(brush);
             pipette = null;
             pipetteMode = false;
         }
@@ -346,8 +338,8 @@ public class CanvasView extends View {
     }
 
     private void drawHistoryItem(HistoryItem item, Canvas canvas) {
-        paint.setStrokeWidth(item.getThickness());
-        paint.setColor(item.getColor());
+        paint.setStrokeWidth(item.getBrush().getThicknessPx());
+        paint.setColor(item.getBrush().getColor());
         canvas.drawPath(item.getPath(), paint);
     }
 

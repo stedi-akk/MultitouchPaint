@@ -22,8 +22,4 @@ public final class Utils {
     public static float dp2px(float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, App.getContext().getResources().getDisplayMetrics());
     }
-
-    public static String getThicknessText(int thickness) {
-        return thickness + "dp";
-    }
 }

@@ -3,10 +3,9 @@ package com.stedi.multitouchpaint.history;
 import android.graphics.Path;
 
 public class HistoryItem {
+    private Brush brush;
     private Status status;
     private Path path;
-    private int color;
-    private float thickness;
 
     public enum Status {
         ON_VIEW_CANVAS,
@@ -14,14 +13,17 @@ public class HistoryItem {
         READY_TO_DELETE
     }
 
-    public HistoryItem(int color, float thickness) {
+    public HistoryItem(Brush brush) {
+        this.brush = brush;
         this.path = new Path();
-        this.color = color;
-        this.thickness = thickness;
     }
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Brush getBrush() {
+        return brush;
     }
 
     public Status getStatus() {
@@ -30,13 +32,5 @@ public class HistoryItem {
 
     public Path getPath() {
         return path;
-    }
-
-    public int getColor() {
-        return color;
-    }
-
-    public float getThickness() {
-        return thickness;
     }
 }
