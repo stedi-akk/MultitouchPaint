@@ -11,8 +11,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.stedi.multitouchpaint.App;
-import com.stedi.multitouchpaint.history.Brush;
 import com.stedi.multitouchpaint.Config;
+import com.stedi.multitouchpaint.history.Brush;
 import com.stedi.multitouchpaint.history.HistoryItem;
 import com.stedi.multitouchpaint.history.Pointer;
 
@@ -159,7 +159,7 @@ public class CanvasView extends View {
         togglePipetteMode(false);
     }
 
-    public boolean isPipetteMode() {
+    public boolean inPipetteMode() {
         return pipetteMode;
     }
 

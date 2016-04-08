@@ -8,20 +8,28 @@ import android.view.ViewGroup;
 import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.R;
 
-public class ExitDialog extends BaseDialog implements View.OnClickListener {
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class ExitDialog extends BaseDialog {
     public class CallbackEvent {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.exit_dialog, container, false);
-        root.findViewById(R.id.done).setOnClickListener(this);
-        root.findViewById(R.id.cancel).setOnClickListener(this);
+        ButterKnife.bind(this, root);
         return root;
     }
 
     @Override
-    public void onClick(View v) {
+    public void onDestroyView() {
+        ButterKnife.unbind(this);
+        super.onDestroyView();
+    }
+
+    @OnClick({R.id.done, R.id.cancel})
+    public void onButtonsClick(View v) {
         if (v.getId() == R.id.done)
             App.getBus().post(new CallbackEvent());
         dismiss();

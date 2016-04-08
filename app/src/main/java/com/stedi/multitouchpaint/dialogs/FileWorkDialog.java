@@ -9,7 +9,10 @@ import com.squareup.otto.Bus;
 import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.R;
 
-public class FileWorkDialog extends BaseDialog implements View.OnClickListener {
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class FileWorkDialog extends BaseDialog {
     public enum CallbackEvent {
         ON_NEW_FILE,
         ON_OPEN,
@@ -19,14 +22,18 @@ public class FileWorkDialog extends BaseDialog implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.file_work_dialog, container, false);
-        root.findViewById(R.id.file_work_dialog_new_file).setOnClickListener(this);
-        root.findViewById(R.id.file_work_dialog_open).setOnClickListener(this);
-        root.findViewById(R.id.file_work_dialog_save).setOnClickListener(this);
+        ButterKnife.bind(this, root);
         return root;
     }
 
     @Override
-    public void onClick(View v) {
+    public void onDestroyView() {
+        ButterKnife.unbind(this);
+        super.onDestroyView();
+    }
+
+    @OnClick({R.id.file_work_dialog_new_file, R.id.file_work_dialog_open, R.id.file_work_dialog_save})
+    public void onButtonsClick(View v) {
         Bus bus = App.getBus();
         switch (v.getId()) {
             case R.id.file_work_dialog_new_file:

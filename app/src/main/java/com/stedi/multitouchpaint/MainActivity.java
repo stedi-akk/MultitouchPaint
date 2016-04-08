@@ -17,13 +17,17 @@ import com.stedi.multitouchpaint.history.Brush;
 import com.stedi.multitouchpaint.view.CanvasView;
 import com.stedi.multitouchpaint.view.WorkPanel;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class MainActivity extends Activity {
     private final String KEY_BRUSH = "key_brush";
-
     private final int REQUEST_GET_IMAGE = 111;
 
-    private CanvasView canvasView;
-    private WorkPanel workPanel;
+    @Bind(R.id.main_activity_canvas_view)
+    CanvasView canvasView;
+    @Bind(R.id.main_activity_work_panel)
+    WorkPanel workPanel;
 
     private Brush brush;
 
@@ -33,8 +37,7 @@ public class MainActivity extends Activity {
         App.getBus().register(this);
 
         setContentView(R.layout.main_activity);
-        canvasView = (CanvasView) findViewById(R.id.main_activity_canvas_view);
-        workPanel = (WorkPanel) findViewById(R.id.main_activity_work_panel);
+        ButterKnife.bind(this);
 
         if (savedInstanceState != null)
             brush = savedInstanceState.getParcelable(KEY_BRUSH);
@@ -59,7 +62,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (canvasView.isPipetteMode()) {
+        if (canvasView.inPipetteMode()) {
             canvasView.disablePipette();
             workPanel.show();
             return;

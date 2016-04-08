@@ -12,14 +12,20 @@ import android.widget.TextView;
 import com.github.danielnilsson9.colorpickerview.view.ColorPanelView;
 import com.squareup.otto.Bus;
 import com.stedi.multitouchpaint.App;
-import com.stedi.multitouchpaint.history.Brush;
 import com.stedi.multitouchpaint.R;
+import com.stedi.multitouchpaint.history.Brush;
 
-public class WorkPanel extends FrameLayout implements View.OnClickListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class WorkPanel extends FrameLayout {
     private Visibility visibility = Visibility.SHOWN;
 
-    private ColorPanelView colorHolder;
-    private TextView tvThickness;
+    @Bind(R.id.work_panel_color_holder)
+    ColorPanelView colorHolder;
+    @Bind(R.id.work_panel_thickness)
+    TextView tvThickness;
 
     public enum CallbackEvent {
         ON_FILE_WORK_CLICK,
@@ -47,14 +53,7 @@ public class WorkPanel extends FrameLayout implements View.OnClickListener {
     public WorkPanel(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.work_panel, this, true);
-        findViewById(R.id.work_panel_file_work).setOnClickListener(this);
-        findViewById(R.id.work_panel_pipette).setOnClickListener(this);
-        findViewById(R.id.work_panel_color).setOnClickListener(this);
-        colorHolder = (ColorPanelView) findViewById(R.id.work_panel_color_holder);
-        tvThickness = (TextView) findViewById(R.id.work_panel_thickness);
-        tvThickness.setOnClickListener(this);
-        findViewById(R.id.work_panel_undo).setOnClickListener(this);
-        findViewById(R.id.work_panel_exit).setOnClickListener(this);
+        ButterKnife.bind(this);
     }
 
     public void setBrush(Brush brush) {
@@ -62,8 +61,8 @@ public class WorkPanel extends FrameLayout implements View.OnClickListener {
         tvThickness.setText(brush.getThicknessText());
     }
 
-    @Override
-    public void onClick(View v) {
+    @OnClick({R.id.work_panel_file_work, R.id.work_panel_pipette, R.id.work_panel_color, R.id.work_panel_thickness, R.id.work_panel_undo, R.id.work_panel_exit})
+    public void onButtonsClick(View v) {
         Bus bus = App.getBus();
         switch (v.getId()) {
             case R.id.work_panel_file_work:
