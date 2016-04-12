@@ -328,8 +328,9 @@ public class CanvasView extends View {
         } else {
             bitmapForPipette.recycle();
             bitmapForPipette = null;
-            brush.setColor(pipette.getColor());
-            App.getBus().post(brush);
+            Brush newBrush = Brush.copy(brush);
+            newBrush.setColor(pipette.getColor());
+            App.getBus().post(newBrush);
             pipette = null;
             pipetteMode = false;
         }

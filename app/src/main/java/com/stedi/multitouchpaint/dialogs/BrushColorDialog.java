@@ -36,8 +36,10 @@ public class BrushColorDialog extends BaseDialog implements ColorPickerView.OnCo
         View root = inflater.inflate(R.layout.brush_color_dialog, container, false);
         ButterKnife.bind(this, root);
 
-        brush = getArguments().getParcelable(KEY_BRUSH);
-        if (brush == null)
+        Brush argsBrush = getArguments().getParcelable(KEY_BRUSH);
+        if (argsBrush != null)
+            brush = Brush.copy(argsBrush);
+        else
             brush = Brush.createDefault();
 
         ColorPickerView colorPicker = ButterKnife.findById(root, R.id.brush_color_dialog_color_picker);
