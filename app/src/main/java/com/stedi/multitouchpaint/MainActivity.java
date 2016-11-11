@@ -17,16 +17,16 @@ import com.stedi.multitouchpaint.history.Brush;
 import com.stedi.multitouchpaint.view.CanvasView;
 import com.stedi.multitouchpaint.view.WorkPanel;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends Activity {
     private final String KEY_BRUSH = "key_brush";
     private final int REQUEST_GET_IMAGE = 111;
 
-    @Bind(R.id.main_activity_canvas_view)
+    @BindView(R.id.main_activity_canvas_view)
     CanvasView canvasView;
-    @Bind(R.id.main_activity_work_panel)
+    @BindView(R.id.main_activity_work_panel)
     WorkPanel workPanel;
 
     private Brush brush;

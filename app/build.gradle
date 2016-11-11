@@ -1,26 +1,38 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
 
     defaultConfig {
         applicationId "com.stedi.multitouchpaint"
         minSdkVersion 15
-        targetSdkVersion 22
-        versionCode 5
-        versionName "2.3"
+        targetSdkVersion 24
+        versionCode 6
+        versionName "2.4"
     }
 
     signingConfigs {
         release {
-            Properties props = new Properties()
-            props.load(new FileInputStream(new File("local.properties")))
-            storeFile = file(props['storeFile'])
-            keyAlias = props['keyAlias']
-            storePassword = props['storePassword']
-            keyPassword = props['keyPassword']
+            def propsFile = new File("local.properties")
+            if (propsFile.exists()) {
+                Properties props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                if (props['storeFile'] != null && !props['storeFile'].isEmpty()) {
+                    storeFile = file(props['storeFile'])
+                    keyAlias = props['keyAlias']
+                    storePassword = props['storePassword']
+                    keyPassword = props['keyPassword']
+                }
+            }
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     buildTypes {
@@ -39,6 +51,7 @@ android {
 
 dependencies {
     compile "com.github.danielnilsson9:color-picker-view:1.4.0@aar"
-    compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.squareup:otto:1.3.8'
+    compile 'com.jakewharton:butterknife:8.2.1'
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
 }

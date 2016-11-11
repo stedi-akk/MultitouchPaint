@@ -10,21 +10,24 @@ import com.stedi.multitouchpaint.R;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 public class ExitDialog extends BaseDialog {
+    private Unbinder unbinder;
+
     public class CallbackEvent {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.exit_dialog, container, false);
-        ButterKnife.bind(this, root);
+        unbinder = ButterKnife.bind(this, root);
         return root;
     }
 
     @Override
     public void onDestroyView() {
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         super.onDestroyView();
     }
 

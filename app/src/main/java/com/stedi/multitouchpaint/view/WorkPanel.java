@@ -15,16 +15,16 @@ import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.R;
 import com.stedi.multitouchpaint.history.Brush;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class WorkPanel extends FrameLayout {
     private Visibility visibility = Visibility.SHOWN;
 
-    @Bind(R.id.work_panel_color_holder)
+    @BindView(R.id.work_panel_color_holder)
     ColorPanelView colorHolder;
-    @Bind(R.id.work_panel_thickness)
+    @BindView(R.id.work_panel_thickness)
     TextView tvThickness;
 
     public enum CallbackEvent {

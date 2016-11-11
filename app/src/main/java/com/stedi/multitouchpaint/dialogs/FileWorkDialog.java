@@ -11,8 +11,11 @@ import com.stedi.multitouchpaint.R;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 public class FileWorkDialog extends BaseDialog {
+    private Unbinder unbinder;
+
     public enum CallbackEvent {
         ON_NEW_FILE,
         ON_OPEN,
@@ -22,13 +25,13 @@ public class FileWorkDialog extends BaseDialog {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.file_work_dialog, container, false);
-        ButterKnife.bind(this, root);
+        unbinder = ButterKnife.bind(this, root);
         return root;
     }
 
     @Override
     public void onDestroyView() {
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         super.onDestroyView();
     }
 
