@@ -88,10 +88,10 @@ public class MainActivity extends Activity {
     }
 
     @Subscribe
-    public void onWorkPanelEvent(WorkPanel.CallbackEvent event) {
+    public void onWorkPanelEvent(WorkPanel.Callback callback) {
         if (canvasView.isDrawing())
             return;
-        switch (event) {
+        switch (callback) {
             case ON_FILE_WORK_CLICK:
                 new FileWorkDialog().show(getFragmentManager(), FileWorkDialog.class.getName());
                 break;
@@ -117,8 +117,8 @@ public class MainActivity extends Activity {
     }
 
     @Subscribe
-    public void onFileWorkDialogEvent(FileWorkDialog.CallbackEvent event) {
-        switch (event) {
+    public void onFileWorkDialogEvent(FileWorkDialog.Callback callback) {
+        switch (callback) {
             case ON_NEW_FILE:
                 canvasView.clearPicture();
                 break;
@@ -135,21 +135,21 @@ public class MainActivity extends Activity {
     }
 
     @Subscribe
-    public void onExitDialogEvent(ExitDialog.CallbackEvent event) {
+    public void onExitDialogEvent(ExitDialog.Callback callback) {
         finish();
     }
 
     @Subscribe
-    public void onBitmapSaverEvent(BitmapSaver.CallbackEvent event) {
-        switch (event) {
+    public void onBitmapSaverEvent(BitmapSaver.Callback callback) {
+        switch (callback) {
             case BITMAP_SAVED:
-                Utils.showToast(R.string.image_successfully_saved);
+                App.showToast(R.string.image_successfully_saved);
                 break;
             case FAILED_TO_SAVE:
-                Utils.showToast(R.string.failed_to_save_image);
+                App.showToast(R.string.failed_to_save_image);
                 break;
             case CANT_SAVE:
-                Utils.showToast(R.string.cant_save_image);
+                App.showToast(R.string.cant_save_image);
                 break;
             default:
                 break;
@@ -157,11 +157,11 @@ public class MainActivity extends Activity {
     }
 
     @Subscribe
-    public void onGalleryBitmapGetterEvent(GalleryBitmapGetter.CallbackEvent event) {
-        Bitmap bitmap = event.bitmap;
+    public void onGalleryBitmapGetterEvent(GalleryBitmapGetter.Callback callback) {
+        Bitmap bitmap = callback.bitmap;
         if (bitmap != null)
             canvasView.setPicture(bitmap);
         else
-            Utils.showToast(R.string.failed_to_load_image);
+            App.showToast(R.string.failed_to_load_image);
     }
 }

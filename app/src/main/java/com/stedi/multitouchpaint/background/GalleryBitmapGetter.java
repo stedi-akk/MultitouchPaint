@@ -13,10 +13,10 @@ import java.io.InputStream;
 public class GalleryBitmapGetter extends BaseBackgroundWorker {
     private final Uri imageUri;
 
-    public class CallbackEvent {
+    public class Callback {
         public final Bitmap bitmap;
 
-        private CallbackEvent(Bitmap bitmap) {
+        private Callback(Bitmap bitmap) {
             this.bitmap = bitmap;
         }
     }
@@ -30,18 +30,13 @@ public class GalleryBitmapGetter extends BaseBackgroundWorker {
         try {
             InputStream is = App.getContext().getContentResolver().openInputStream(imageUri);
             Bitmap bitmap = BitmapFactory.decodeStream(is);
-            postEvent(new CallbackEvent(bitmap));
+            postEvent(new Callback(bitmap));
         } catch (FileNotFoundException | OutOfMemoryError e) {
-            postEvent(new CallbackEvent(null));
+            postEvent(new Callback(null));
         }
     }
 
-    private void postEvent(final CallbackEvent event) {
-        runOnUi(new Runnable() {
-            @Override
-            public void run() {
-                App.getBus().post(event);
-            }
-        });
+    private void postEvent(final Callback event) {
+        runOnUi(() -> App.getBus().post(event));
     }
 }

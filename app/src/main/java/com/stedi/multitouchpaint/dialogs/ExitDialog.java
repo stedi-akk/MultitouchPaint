@@ -15,7 +15,7 @@ import butterknife.Unbinder;
 public class ExitDialog extends BaseDialog {
     private Unbinder unbinder;
 
-    public class CallbackEvent {
+    public class Callback {
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ExitDialog extends BaseDialog {
     @OnClick({R.id.done, R.id.cancel})
     public void onButtonsClick(View v) {
         if (v.getId() == R.id.done)
-            App.getBus().post(new CallbackEvent());
+            App.getBus().post(new Callback());
         dismiss();
     }
 }

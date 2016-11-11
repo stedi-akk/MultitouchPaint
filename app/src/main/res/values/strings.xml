@@ -6,6 +6,6 @@
     <string name="save">Save</string>
     <string name="cant_save_image">Can\'t save image</string>
     <string name="failed_to_save_image">Failed to save image</string>
-    <string name="image_successfully_saved">Image successfully saved to Pictures</string>
+    <string name="image_successfully_saved">Image successfully saved to Pictures folder</string>
     <string name="failed_to_load_image">Failed to load image</string>
 </resources>

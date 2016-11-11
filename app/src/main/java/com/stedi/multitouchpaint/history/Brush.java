@@ -3,8 +3,8 @@ package com.stedi.multitouchpaint.history;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.Config;
-import com.stedi.multitouchpaint.Utils;
 
 public class Brush implements Parcelable {
     private float thicknessPx;
@@ -31,7 +31,7 @@ public class Brush implements Parcelable {
 
     public void setThickness(int thickness) {
         this.thickness = thickness;
-        thicknessPx = Utils.dp2px(this.thickness);
+        thicknessPx = App.dp2px(this.thickness);
     }
 
     public int getThickness() {

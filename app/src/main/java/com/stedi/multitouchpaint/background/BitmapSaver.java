@@ -15,7 +15,7 @@ import java.io.IOException;
 public class BitmapSaver extends BaseBackgroundWorker {
     private final Bitmap target;
 
-    public enum CallbackEvent {
+    public enum Callback {
         BITMAP_SAVED,
         FAILED_TO_SAVE,
         CANT_SAVE
@@ -39,28 +39,23 @@ public class BitmapSaver extends BaseBackgroundWorker {
                     FileOutputStream fos = new FileOutputStream(file);
                     if (target.compress(Bitmap.CompressFormat.PNG, 100, fos)) {
                         App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
-                        postEvent(CallbackEvent.BITMAP_SAVED);
+                        postEvent(Callback.BITMAP_SAVED);
                     } else {
-                        postEvent(CallbackEvent.FAILED_TO_SAVE);
+                        postEvent(Callback.FAILED_TO_SAVE);
                     }
                     fos.close();
                 } catch (IOException e) {
-                    postEvent(CallbackEvent.FAILED_TO_SAVE);
+                    postEvent(Callback.FAILED_TO_SAVE);
                 }
             } else {
-                postEvent(CallbackEvent.CANT_SAVE);
+                postEvent(Callback.CANT_SAVE);
             }
         } else {
-            postEvent(CallbackEvent.CANT_SAVE);
+            postEvent(Callback.CANT_SAVE);
         }
     }
 
-    private void postEvent(final CallbackEvent event) {
-        runOnUi(new Runnable() {
-            @Override
-            public void run() {
-                App.getBus().post(event);
-            }
-        });
+    private void postEvent(final Callback event) {
+        runOnUi(() -> App.getBus().post(event));
     }
 }

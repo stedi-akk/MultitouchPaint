@@ -27,7 +27,7 @@ public class WorkPanel extends FrameLayout {
     @BindView(R.id.work_panel_thickness)
     TextView tvThickness;
 
-    public enum CallbackEvent {
+    public enum Callback {
         ON_FILE_WORK_CLICK,
         ON_PIPETTE_CLICK,
         ON_COLOR_CLICK,
@@ -66,22 +66,22 @@ public class WorkPanel extends FrameLayout {
         Bus bus = App.getBus();
         switch (v.getId()) {
             case R.id.work_panel_file_work:
-                bus.post(CallbackEvent.ON_FILE_WORK_CLICK);
+                bus.post(Callback.ON_FILE_WORK_CLICK);
                 break;
             case R.id.work_panel_pipette:
-                bus.post(CallbackEvent.ON_PIPETTE_CLICK);
+                bus.post(Callback.ON_PIPETTE_CLICK);
                 break;
             case R.id.work_panel_color:
-                bus.post(CallbackEvent.ON_COLOR_CLICK);
+                bus.post(Callback.ON_COLOR_CLICK);
                 break;
             case R.id.work_panel_thickness:
-                bus.post(CallbackEvent.ON_THICKNESS_CLICK);
+                bus.post(Callback.ON_THICKNESS_CLICK);
                 break;
             case R.id.work_panel_undo:
-                bus.post(CallbackEvent.ON_UNDO_CLICK);
+                bus.post(Callback.ON_UNDO_CLICK);
                 break;
             case R.id.work_panel_exit:
-                bus.post(CallbackEvent.ON_EXIT_CLICK);
+                bus.post(Callback.ON_EXIT_CLICK);
                 break;
             default:
                 break;

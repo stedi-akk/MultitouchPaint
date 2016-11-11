@@ -16,7 +16,7 @@ import butterknife.Unbinder;
 public class FileWorkDialog extends BaseDialog {
     private Unbinder unbinder;
 
-    public enum CallbackEvent {
+    public enum Callback {
         ON_NEW_FILE,
         ON_OPEN,
         ON_SAVE
@@ -40,13 +40,13 @@ public class FileWorkDialog extends BaseDialog {
         Bus bus = App.getBus();
         switch (v.getId()) {
             case R.id.file_work_dialog_new_file:
-                bus.post(CallbackEvent.ON_NEW_FILE);
+                bus.post(Callback.ON_NEW_FILE);
                 break;
             case R.id.file_work_dialog_open:
-                bus.post(CallbackEvent.ON_OPEN);
+                bus.post(Callback.ON_OPEN);
                 break;
             case R.id.file_work_dialog_save:
-                bus.post(CallbackEvent.ON_SAVE);
+                bus.post(Callback.ON_SAVE);
                 break;
             default:
                 break;
