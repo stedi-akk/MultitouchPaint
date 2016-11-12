@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_GET_IMAGE) {
-            new BitmapGetter(data.getData()).start();
+            new BitmapGetter(data.getData(), canvasView.getWidth(), canvasView.getHeight()).start();
         }
     }
 

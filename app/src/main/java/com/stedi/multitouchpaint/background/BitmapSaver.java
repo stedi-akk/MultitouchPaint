@@ -44,7 +44,8 @@ public class BitmapSaver extends Thread {
                         postCallback(Callback.FAILED_TO_SAVE);
                     }
                     fos.close();
-                } catch (IOException e) {
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                     postCallback(Callback.FAILED_TO_SAVE);
                 }
             } else {
