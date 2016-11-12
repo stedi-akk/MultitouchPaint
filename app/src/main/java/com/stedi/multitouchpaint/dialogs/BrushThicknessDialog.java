@@ -15,7 +15,6 @@ import com.stedi.multitouchpaint.history.Brush;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 public class BrushThicknessDialog extends BaseDialog implements SeekBar.OnSeekBarChangeListener {
     private static final String KEY_BRUSH = "key_brush";
@@ -24,7 +23,6 @@ public class BrushThicknessDialog extends BaseDialog implements SeekBar.OnSeekBa
     TextView tvThicknessTo;
 
     private Brush brush;
-    private Unbinder unbinder;
 
     public static BrushThicknessDialog newInstance(Brush brush) {
         Bundle args = new Bundle();
@@ -36,8 +34,7 @@ public class BrushThicknessDialog extends BaseDialog implements SeekBar.OnSeekBa
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.brush_thickness_dialog, container, false);
-        unbinder = ButterKnife.bind(this, root);
+        View root = butterKnifeInflate(inflater, R.layout.brush_thickness_dialog, container);
 
         Brush argsBrush = getArguments().getParcelable(KEY_BRUSH);
         if (argsBrush != null)
@@ -55,12 +52,6 @@ public class BrushThicknessDialog extends BaseDialog implements SeekBar.OnSeekBa
         tvThicknessTo.setText(brush.getThicknessText());
 
         return root;
-    }
-
-    @Override
-    public void onDestroyView() {
-        unbinder.unbind();
-        super.onDestroyView();
     }
 
     @OnClick({R.id.done, R.id.cancel})

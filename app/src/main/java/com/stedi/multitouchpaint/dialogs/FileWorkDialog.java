@@ -9,13 +9,9 @@ import com.squareup.otto.Bus;
 import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.R;
 
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 public class FileWorkDialog extends BaseDialog {
-    private Unbinder unbinder;
-
     public enum Callback {
         ON_NEW_FILE,
         ON_OPEN,
@@ -24,15 +20,7 @@ public class FileWorkDialog extends BaseDialog {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.file_work_dialog, container, false);
-        unbinder = ButterKnife.bind(this, root);
-        return root;
-    }
-
-    @Override
-    public void onDestroyView() {
-        unbinder.unbind();
-        super.onDestroyView();
+        return butterKnifeInflate(inflater, R.layout.file_work_dialog, container);
     }
 
     @OnClick({R.id.file_work_dialog_new_file, R.id.file_work_dialog_open, R.id.file_work_dialog_save})

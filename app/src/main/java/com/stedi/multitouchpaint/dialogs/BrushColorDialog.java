@@ -14,7 +14,6 @@ import com.stedi.multitouchpaint.history.Brush;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 public class BrushColorDialog extends BaseDialog implements ColorPickerView.OnColorChangedListener {
     private static final String KEY_BRUSH = "key_brush";
@@ -23,7 +22,6 @@ public class BrushColorDialog extends BaseDialog implements ColorPickerView.OnCo
     ColorPanelView colorTo;
 
     private Brush brush;
-    private Unbinder unbinder;
 
     public static BrushColorDialog newInstance(Brush brush) {
         Bundle args = new Bundle();
@@ -35,8 +33,7 @@ public class BrushColorDialog extends BaseDialog implements ColorPickerView.OnCo
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.brush_color_dialog, container, false);
-        unbinder = ButterKnife.bind(this, root);
+        View root = butterKnifeInflate(inflater, R.layout.brush_color_dialog, container);
 
         Brush argsBrush = getArguments().getParcelable(KEY_BRUSH);
         if (argsBrush != null)
@@ -53,12 +50,6 @@ public class BrushColorDialog extends BaseDialog implements ColorPickerView.OnCo
         colorTo.setColor(brush.getColor());
 
         return root;
-    }
-
-    @Override
-    public void onDestroyView() {
-        unbinder.unbind();
-        super.onDestroyView();
     }
 
     @OnClick({R.id.done, R.id.cancel})
