@@ -1,6 +1,5 @@
 package com.stedi.multitouchpaint.background;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -10,7 +9,7 @@ import com.stedi.multitouchpaint.App;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-public class GalleryBitmapGetter extends BaseBackgroundWorker {
+public class BitmapGetter extends Thread {
     private final Uri imageUri;
 
     public class Callback {
@@ -21,8 +20,8 @@ public class GalleryBitmapGetter extends BaseBackgroundWorker {
         }
     }
 
-    public GalleryBitmapGetter(Intent intent) {
-        imageUri = intent.getData();
+    public BitmapGetter(Uri imageUri) {
+        this.imageUri = imageUri;
     }
 
     @Override
@@ -30,13 +29,13 @@ public class GalleryBitmapGetter extends BaseBackgroundWorker {
         try {
             InputStream is = App.getContext().getContentResolver().openInputStream(imageUri);
             Bitmap bitmap = BitmapFactory.decodeStream(is);
-            postEvent(new Callback(bitmap));
+            postCallback(new Callback(bitmap));
         } catch (FileNotFoundException | OutOfMemoryError e) {
-            postEvent(new Callback(null));
+            postCallback(new Callback(null));
         }
     }
 
-    private void postEvent(final Callback event) {
-        runOnUi(() -> App.getBus().post(event));
+    private void postCallback(Callback callback) {
+        PendingRunnables.getInstance().post(() -> App.getBus().post(callback));
     }
 }

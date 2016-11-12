@@ -7,8 +7,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 
 import com.squareup.otto.Subscribe;
+import com.stedi.multitouchpaint.background.BitmapGetter;
 import com.stedi.multitouchpaint.background.BitmapSaver;
-import com.stedi.multitouchpaint.background.GalleryBitmapGetter;
+import com.stedi.multitouchpaint.background.PendingRunnables;
 import com.stedi.multitouchpaint.dialogs.BrushColorDialog;
 import com.stedi.multitouchpaint.dialogs.BrushThicknessDialog;
 import com.stedi.multitouchpaint.dialogs.ExitDialog;
@@ -55,6 +56,18 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        PendingRunnables.getInstance().onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        PendingRunnables.getInstance().onPause();
+    }
+
+    @Override
     protected void onDestroy() {
         App.getBus().unregister(this);
         super.onDestroy();
@@ -76,7 +89,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_GET_IMAGE) {
-            new GalleryBitmapGetter(data).start();
+            new BitmapGetter(data.getData()).start();
         }
     }
 
@@ -157,7 +170,7 @@ public class MainActivity extends Activity {
     }
 
     @Subscribe
-    public void onGalleryBitmapGetterEvent(GalleryBitmapGetter.Callback callback) {
+    public void onGalleryBitmapGetterEvent(BitmapGetter.Callback callback) {
         Bitmap bitmap = callback.bitmap;
         if (bitmap != null)
             canvasView.setPicture(bitmap);
