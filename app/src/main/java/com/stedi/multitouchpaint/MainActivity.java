@@ -1,10 +1,14 @@
 package com.stedi.multitouchpaint;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 
 import com.squareup.otto.Subscribe;
 import com.stedi.multitouchpaint.background.BitmapGetter;
@@ -24,6 +28,8 @@ import butterknife.ButterKnife;
 public class MainActivity extends Activity {
     private final String KEY_BRUSH = "key_brush";
     private final int REQUEST_GET_IMAGE = 111;
+    private final int REQUEST_PERM_READ = 222;
+    private final int REQUEST_PERM_WRITE = 333;
 
     @BindView(R.id.main_activity_canvas_view)
     CanvasView canvasView;
@@ -87,6 +93,22 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED)
+            return;
+        switch (requestCode) {
+            case REQUEST_PERM_WRITE:
+                saveCanvasViewImage();
+                break;
+            case REQUEST_PERM_READ:
+                startPickImageIntent();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_GET_IMAGE) {
             new BitmapGetter(data.getData(), canvasView.getWidth(), canvasView.getHeight()).start();
@@ -136,11 +158,12 @@ public class MainActivity extends Activity {
                 canvasView.clearPicture();
                 break;
             case ON_OPEN:
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, REQUEST_GET_IMAGE);
+                if (checkForPermission(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_PERM_READ))
+                    startPickImageIntent();
                 break;
             case ON_SAVE:
-                new BitmapSaver(canvasView.generatePicture()).start();
+                if (checkForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_PERM_WRITE))
+                    saveCanvasViewImage();
                 break;
             default:
                 break;
@@ -176,5 +199,22 @@ public class MainActivity extends Activity {
             canvasView.setPicture(bitmap);
         else
             App.showToast(R.string.failed_to_load_image);
+    }
+
+    private void saveCanvasViewImage() {
+        new BitmapSaver(canvasView.generatePicture()).start();
+    }
+
+    private void startPickImageIntent() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_GET_IMAGE);
+    }
+
+    private boolean checkForPermission(String permission, int requestCode) {
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
+            return false;
+        }
+        return true;
     }
 }

@@ -30,15 +30,21 @@ public class BitmapGetter extends Thread {
     @Override
     public void run() {
         try {
+            // checking image size
             InputStream is = App.getContext().getContentResolver().openInputStream(imageUri);
-
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(is, null, options);
+            is.close();
+
+            // getting resized down image (if required)
+            is = App.getContext().getContentResolver().openInputStream(imageUri); // stream should be reopened again after use
             options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
             options.inJustDecodeBounds = false;
+            Bitmap bitmap = BitmapFactory.decodeStream(is, null, options);
+            is.close();
 
-            postCallback(new Callback(BitmapFactory.decodeStream(is, null, options)));
+            postCallback(new Callback(bitmap));
         } catch (Exception ex) {
             ex.printStackTrace();
             postCallback(new Callback(null));
@@ -46,19 +52,11 @@ public class BitmapGetter extends Thread {
     }
 
     private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        final int height = options.outHeight;
-        final int width = options.outWidth;
         int inSampleSize = 1;
 
-        if (height > reqHeight || width > reqWidth) {
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
+        while ((options.outHeight / inSampleSize) > reqHeight
+                && (options.outWidth / inSampleSize) > reqWidth)
+            inSampleSize *= 2;
 
         return inSampleSize;
     }
