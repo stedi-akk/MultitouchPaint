@@ -4,4 +4,5 @@
     <dimen name="brush_thickness_dialog_width">260dp</dimen>
     <dimen name="file_work_dialog_width">150dp</dimen>
     <dimen name="exit_dialog_width">200dp</dimen>
+    <dimen name="wait_dialog_padding">25dp</dimen>
 </resources>

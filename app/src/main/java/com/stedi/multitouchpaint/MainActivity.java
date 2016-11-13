@@ -18,6 +18,7 @@ import com.stedi.multitouchpaint.dialogs.BrushColorDialog;
 import com.stedi.multitouchpaint.dialogs.BrushThicknessDialog;
 import com.stedi.multitouchpaint.dialogs.ExitDialog;
 import com.stedi.multitouchpaint.dialogs.FileWorkDialog;
+import com.stedi.multitouchpaint.dialogs.WaitDialog;
 import com.stedi.multitouchpaint.history.Brush;
 import com.stedi.multitouchpaint.view.CanvasView;
 import com.stedi.multitouchpaint.view.WorkPanel;
@@ -111,6 +112,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_GET_IMAGE) {
+            WaitDialog.start(getFragmentManager());
             new BitmapGetter(data.getData(), canvasView.getWidth(), canvasView.getHeight()).start();
         }
     }
@@ -177,6 +179,7 @@ public class MainActivity extends Activity {
 
     @Subscribe
     public void onBitmapSaverEvent(BitmapSaver.Callback callback) {
+        WaitDialog.stop(getFragmentManager());
         switch (callback) {
             case BITMAP_SAVED:
                 App.showToast(R.string.image_successfully_saved);
@@ -194,6 +197,7 @@ public class MainActivity extends Activity {
 
     @Subscribe
     public void onGalleryBitmapGetterEvent(BitmapGetter.Callback callback) {
+        WaitDialog.stop(getFragmentManager());
         Bitmap bitmap = callback.bitmap;
         if (bitmap != null)
             canvasView.setPicture(bitmap);
@@ -202,6 +206,7 @@ public class MainActivity extends Activity {
     }
 
     private void saveCanvasViewImage() {
+        WaitDialog.start(getFragmentManager());
         new BitmapSaver(canvasView.generatePicture()).start();
     }
 

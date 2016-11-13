@@ -2,4 +2,6 @@
 <resources>
     <dimen name="brush_color_dialog_width">350dp</dimen>
     <dimen name="brush_thickness_dialog_width">350dp</dimen>
+    <dimen name="file_work_dialog_width">200dp</dimen>
+    <dimen name="wait_dialog_padding">35dp</dimen>
 </resources>
