@@ -9,27 +9,11 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.stedi.multitouchpaint.data.Brush;
+import com.stedi.multitouchpaint.painter.BasePainter;
 
 public class CanvasView extends View {
+    private BasePainter painter;
     private Brush brush;
-
-    public interface Painter {
-        void onPointerDown(MotionEvent event, Brush brush, CanvasView canvasView);
-
-        void onPointerMove(MotionEvent event, Brush brush, CanvasView canvasView);
-
-        void onPointerUp(MotionEvent event, Brush brush, CanvasView canvasView);
-
-        void onDraw(Canvas viewCanvas);
-
-        boolean onUndo();
-
-        boolean onClear();
-
-        void onSetPicture(Bitmap bitmap, int canvasWidth, int canvasHeight);
-
-        boolean isDrawing();
-    }
 
     public CanvasView(Context context) {
         this(context, null);
@@ -44,16 +28,14 @@ public class CanvasView extends View {
         setBackgroundColor(Color.WHITE);
     }
 
-    public void setPainter(Painter painter) {
+    public void setPainter(BasePainter painter) {
         this.painter = painter;
         invalidate();
     }
 
-    public Painter getPainter() {
+    public BasePainter getPainter() {
         return painter;
     }
-
-    private Painter painter;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -109,9 +91,7 @@ public class CanvasView extends View {
 
     public void setPicture(Bitmap bitmap) {
         clearPicture();
-
         painter.onSetPicture(bitmap, getWidth(), getHeight());
-
         invalidate();
     }
 

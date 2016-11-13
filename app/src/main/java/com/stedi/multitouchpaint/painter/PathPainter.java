@@ -1,4 +1,4 @@
-package com.stedi.multitouchpaint.view.painters;
+package com.stedi.multitouchpaint.painter;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,7 +16,7 @@ import com.stedi.multitouchpaint.view.CanvasView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PathPainter implements CanvasView.Painter {
+public class PathPainter extends BasePainter {
     private static PathPainter instance;
 
     private ArrayList<HistoryItem> history = new ArrayList<>();

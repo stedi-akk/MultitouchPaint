@@ -1,4 +1,4 @@
-package com.stedi.multitouchpaint.view.painters;
+package com.stedi.multitouchpaint.painter;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -13,7 +13,7 @@ import com.stedi.multitouchpaint.data.Brush;
 import com.stedi.multitouchpaint.data.Pointer;
 import com.stedi.multitouchpaint.view.CanvasView;
 
-public class PipettePainter implements CanvasView.Painter {
+public class PipettePainter extends BasePainter {
     private final float headRadius = App.dp2px(25);
     private final float needleLength = App.dp2px(50);
     private final float needleEnlargement = App.dp2px(8);
@@ -44,6 +44,10 @@ public class PipettePainter implements CanvasView.Painter {
         needlePath.setFillType(Path.FillType.EVEN_ODD);
     }
 
+    public int getColor() {
+        return color;
+    }
+
     @Override
     public void onPointerDown(MotionEvent event, Brush brush, CanvasView canvasView) {
         onMove(event, canvasView);
@@ -52,11 +56,6 @@ public class PipettePainter implements CanvasView.Painter {
     @Override
     public void onPointerMove(MotionEvent event, Brush brush, CanvasView canvasView) {
         onMove(event, canvasView);
-    }
-
-    @Override
-    public void onPointerUp(MotionEvent event, Brush brush, CanvasView canvasView) {
-
     }
 
     @Override
@@ -97,30 +96,6 @@ public class PipettePainter implements CanvasView.Painter {
                 }
             }
         }
-    }
-
-    @Override
-    public boolean onUndo() {
-        return false;
-    }
-
-    @Override
-    public boolean onClear() {
-        return false;
-    }
-
-    @Override
-    public void onSetPicture(Bitmap bitmap, int canvasWidth, int canvasHeight) {
-
-    }
-
-    @Override
-    public boolean isDrawing() {
-        return false;
-    }
-
-    public int getColor() {
-        return color;
     }
 
     private void onMove(MotionEvent event, CanvasView canvasView) {

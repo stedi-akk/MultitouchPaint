@@ -21,10 +21,10 @@ import com.stedi.multitouchpaint.dialogs.BrushThicknessDialog;
 import com.stedi.multitouchpaint.dialogs.ExitDialog;
 import com.stedi.multitouchpaint.dialogs.FileWorkDialog;
 import com.stedi.multitouchpaint.dialogs.WaitDialog;
+import com.stedi.multitouchpaint.painter.PathPainter;
+import com.stedi.multitouchpaint.painter.PipettePainter;
 import com.stedi.multitouchpaint.view.CanvasView;
 import com.stedi.multitouchpaint.view.WorkPanel;
-import com.stedi.multitouchpaint.view.painters.PathPainter;
-import com.stedi.multitouchpaint.view.painters.PipettePainter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
