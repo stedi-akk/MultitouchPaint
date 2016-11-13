@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.stedi.multitouchpaint.R;
 
 public class WaitDialog extends BaseDialog {
-    private static final String TAG = WaitDialog.class.getSimpleName();
+    private static final String TAG = WaitDialog.class.getName();
 
     @Nullable
     @Override

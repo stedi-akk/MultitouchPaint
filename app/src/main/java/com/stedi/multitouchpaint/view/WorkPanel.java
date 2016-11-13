@@ -10,30 +10,35 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.github.danielnilsson9.colorpickerview.view.ColorPanelView;
-import com.squareup.otto.Bus;
 import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.R;
-import com.stedi.multitouchpaint.history.Brush;
+import com.stedi.multitouchpaint.data.Brush;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class WorkPanel extends FrameLayout {
     private Visibility visibility = Visibility.SHOWN;
 
     @BindView(R.id.work_panel_color_holder)
     ColorPanelView colorHolder;
+
     @BindView(R.id.work_panel_thickness)
     TextView tvThickness;
 
     public enum Callback {
-        ON_FILE_WORK_CLICK,
-        ON_PIPETTE_CLICK,
-        ON_COLOR_CLICK,
-        ON_THICKNESS_CLICK,
-        ON_UNDO_CLICK,
-        ON_EXIT_CLICK
+        ON_FILE_WORK_CLICK(R.id.work_panel_file_work),
+        ON_PIPETTE_CLICK(R.id.work_panel_pipette),
+        ON_COLOR_CLICK(R.id.work_panel_color),
+        ON_THICKNESS_CLICK(R.id.work_panel_thickness),
+        ON_UNDO_CLICK(R.id.work_panel_undo),
+        ON_EXIT_CLICK(R.id.work_panel_exit);
+
+        private final int buttonId;
+
+        Callback(int buttonId) {
+            this.buttonId = buttonId;
+        }
     }
 
     private enum Visibility {
@@ -54,38 +59,13 @@ public class WorkPanel extends FrameLayout {
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.work_panel, this, true);
         ButterKnife.bind(this);
+        for (Callback callback : Callback.values())
+            findViewById(callback.buttonId).setOnClickListener(v -> App.getBus().post(callback));
     }
 
     public void setBrush(Brush brush) {
         colorHolder.setColor(brush.getColor());
         tvThickness.setText(brush.getThicknessText());
-    }
-
-    @OnClick({R.id.work_panel_file_work, R.id.work_panel_pipette, R.id.work_panel_color, R.id.work_panel_thickness, R.id.work_panel_undo, R.id.work_panel_exit})
-    public void onButtonsClick(View v) {
-        Bus bus = App.getBus();
-        switch (v.getId()) {
-            case R.id.work_panel_file_work:
-                bus.post(Callback.ON_FILE_WORK_CLICK);
-                break;
-            case R.id.work_panel_pipette:
-                bus.post(Callback.ON_PIPETTE_CLICK);
-                break;
-            case R.id.work_panel_color:
-                bus.post(Callback.ON_COLOR_CLICK);
-                break;
-            case R.id.work_panel_thickness:
-                bus.post(Callback.ON_THICKNESS_CLICK);
-                break;
-            case R.id.work_panel_undo:
-                bus.post(Callback.ON_UNDO_CLICK);
-                break;
-            case R.id.work_panel_exit:
-                bus.post(Callback.ON_EXIT_CLICK);
-                break;
-            default:
-                break;
-        }
     }
 
     public void show() {

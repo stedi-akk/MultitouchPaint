@@ -8,7 +8,7 @@ import android.graphics.Path;
 
 import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.R;
-import com.stedi.multitouchpaint.history.Pointer;
+import com.stedi.multitouchpaint.data.Pointer;
 
 /**
  * Part of {@link com.stedi.multitouchpaint.view.CanvasView}

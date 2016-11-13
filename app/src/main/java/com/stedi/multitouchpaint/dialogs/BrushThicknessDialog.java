@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.Config;
 import com.stedi.multitouchpaint.R;
-import com.stedi.multitouchpaint.history.Brush;
+import com.stedi.multitouchpaint.data.Brush;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,7 +44,7 @@ public class BrushThicknessDialog extends BaseDialog implements SeekBar.OnSeekBa
 
         SeekBar seekBar = ButterKnife.findById(root, R.id.brush_thickness_dialog_seekbar);
         seekBar.setMax(Config.MAX_BRUSH_THICKNESS - 1);
-        seekBar.setProgress(brush.getThickness());
+        seekBar.setProgress(brush.getThicknessDp());
         seekBar.setOnSeekBarChangeListener(this);
 
         TextView tvThicknessFrom = ButterKnife.findById(root, R.id.brush_thickness_dialog_thickness_from);

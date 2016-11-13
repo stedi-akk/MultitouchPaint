@@ -9,7 +9,7 @@ import com.github.danielnilsson9.colorpickerview.view.ColorPanelView;
 import com.github.danielnilsson9.colorpickerview.view.ColorPickerView;
 import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.R;
-import com.stedi.multitouchpaint.history.Brush;
+import com.stedi.multitouchpaint.data.Brush;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

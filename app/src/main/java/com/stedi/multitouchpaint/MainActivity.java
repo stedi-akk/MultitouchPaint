@@ -2,6 +2,7 @@ package com.stedi.multitouchpaint;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,12 +15,12 @@ import com.squareup.otto.Subscribe;
 import com.stedi.multitouchpaint.background.BitmapGetter;
 import com.stedi.multitouchpaint.background.BitmapSaver;
 import com.stedi.multitouchpaint.background.PendingRunnables;
+import com.stedi.multitouchpaint.data.Brush;
 import com.stedi.multitouchpaint.dialogs.BrushColorDialog;
 import com.stedi.multitouchpaint.dialogs.BrushThicknessDialog;
 import com.stedi.multitouchpaint.dialogs.ExitDialog;
 import com.stedi.multitouchpaint.dialogs.FileWorkDialog;
 import com.stedi.multitouchpaint.dialogs.WaitDialog;
-import com.stedi.multitouchpaint.history.Brush;
 import com.stedi.multitouchpaint.view.CanvasView;
 import com.stedi.multitouchpaint.view.WorkPanel;
 
@@ -57,12 +58,6 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(KEY_BRUSH, brush);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         PendingRunnables.getInstance().onResume();
@@ -72,6 +67,12 @@ public class MainActivity extends Activity {
     protected void onPause() {
         super.onPause();
         PendingRunnables.getInstance().onPause();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(KEY_BRUSH, brush);
     }
 
     @Override
@@ -212,7 +213,12 @@ public class MainActivity extends Activity {
 
     private void startPickImageIntent() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, REQUEST_GET_IMAGE);
+        try {
+            startActivityForResult(intent, REQUEST_GET_IMAGE);
+        } catch (ActivityNotFoundException ex) {
+            ex.printStackTrace();
+            App.showToast(R.string.unknown_error);
+        }
     }
 
     private boolean checkForPermission(String permission, int requestCode) {
