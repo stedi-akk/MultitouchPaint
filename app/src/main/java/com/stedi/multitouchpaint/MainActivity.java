@@ -23,6 +23,8 @@ import com.stedi.multitouchpaint.dialogs.FileWorkDialog;
 import com.stedi.multitouchpaint.dialogs.WaitDialog;
 import com.stedi.multitouchpaint.view.CanvasView;
 import com.stedi.multitouchpaint.view.WorkPanel;
+import com.stedi.multitouchpaint.view.painters.PathPainter;
+import com.stedi.multitouchpaint.view.painters.PipettePainter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +56,7 @@ public class MainActivity extends Activity {
             brush = Brush.createDefault();
 
         canvasView.setBrush(brush);
+        canvasView.setPainter(PathPainter.getInstance());
         workPanel.setBrush(brush);
     }
 
@@ -83,8 +86,12 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (canvasView.inPipetteMode()) {
-            canvasView.disablePipette();
+        if (canvasView.getPainter() instanceof PipettePainter) {
+            PipettePainter pipettePainter = (PipettePainter) canvasView.getPainter();
+            Brush newBrush = Brush.copy(brush);
+            newBrush.setColor(pipettePainter.getColor());
+            App.getBus().post(newBrush);
+            canvasView.setPainter(PathPainter.getInstance());
             workPanel.show();
             return;
         }
@@ -134,7 +141,7 @@ public class MainActivity extends Activity {
                 new FileWorkDialog().show(getFragmentManager(), FileWorkDialog.class.getName());
                 break;
             case ON_PIPETTE_CLICK:
-                canvasView.activatePipette();
+                canvasView.setPainter(new PipettePainter(canvasView.generatePicture()));
                 workPanel.hide();
                 break;
             case ON_COLOR_CLICK:

@@ -1,19 +1,19 @@
-package com.stedi.multitouchpaint.view;
+package com.stedi.multitouchpaint.view.painters;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.view.MotionEvent;
 
 import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.R;
+import com.stedi.multitouchpaint.data.Brush;
 import com.stedi.multitouchpaint.data.Pointer;
+import com.stedi.multitouchpaint.view.CanvasView;
 
-/**
- * Part of {@link com.stedi.multitouchpaint.view.CanvasView}
- */
-class Pipette {
+public class PipettePainter implements CanvasView.Painter {
     private final float headRadius = App.dp2px(25);
     private final float needleLength = App.dp2px(50);
     private final float needleEnlargement = App.dp2px(8);
@@ -33,8 +33,8 @@ class Pipette {
 
     private int color = Color.BLACK;
 
-    Pipette(float x, float y, Bitmap bitmap) {
-        this.pointer = new Pointer(x, y);
+    public PipettePainter(Bitmap bitmap) {
+        this.pointer = new Pointer(bitmap.getWidth() / 2, bitmap.getHeight() / 2);
         this.bitmap = bitmap;
         tryColor();
 
@@ -44,19 +44,28 @@ class Pipette {
         needlePath.setFillType(Path.FillType.EVEN_ODD);
     }
 
-    void move(float x, float y) {
-        pointer.set(x, y);
-        tryColor();
+    @Override
+    public void onPointerDown(MotionEvent event, Brush brush, CanvasView canvasView) {
+        onMove(event, canvasView);
     }
 
-    int getColor() {
-        return color;
+    @Override
+    public void onPointerMove(MotionEvent event, Brush brush, CanvasView canvasView) {
+        onMove(event, canvasView);
     }
 
-    void draw(Canvas canvas) {
+    @Override
+    public void onPointerUp(MotionEvent event, Brush brush, CanvasView canvasView) {
+
+    }
+
+    @Override
+    public void onDraw(Canvas viewCanvas) {
+        viewCanvas.drawBitmap(bitmap, 0, 0, null);
+
         float x = pointer.getX();
         float y = pointer.getY();
-        int xCorner = x + needleLength + headRadius > canvas.getWidth() ? -1 : 1;
+        int xCorner = x + needleLength + headRadius > viewCanvas.getWidth() ? -1 : 1;
         int yCorner = y - needleLength - headRadius < 0 ? -1 : 1;
 
         for (int step = 1; step <= 2; step++) {
@@ -64,7 +73,7 @@ class Pipette {
             float fakeOuterStroke = step == 1 ? shadowWidth : 0;
 
             // head
-            canvas.drawCircle(x + needleLength * xCorner, y - needleLength * yCorner,
+            viewCanvas.drawCircle(x + needleLength * xCorner, y - needleLength * yCorner,
                     headRadius + fakeOuterStroke / 1.5f, paint);
 
             // needle
@@ -74,7 +83,7 @@ class Pipette {
             needlePath.lineTo(x + (needleLength + needleEnlargement + fakeOuterStroke) * xCorner,
                     y + (-needleLength + needleEnlargement + fakeOuterStroke) * yCorner);
             needlePath.close();
-            canvas.drawPath(needlePath, paint);
+            viewCanvas.drawPath(needlePath, paint);
             needlePath.reset();
 
             // inner circle with color
@@ -83,11 +92,43 @@ class Pipette {
                     paint.setColor(innerStep == 1 ? innerStrokeColor : color);
                     float fakeInnerStroke = innerStep == 1 ? innerStrokeWidth : 0;
 
-                    canvas.drawCircle(x + needleLength * xCorner, y - needleLength * yCorner,
+                    viewCanvas.drawCircle(x + needleLength * xCorner, y - needleLength * yCorner,
                             innerRadius + fakeInnerStroke, paint);
                 }
             }
         }
+    }
+
+    @Override
+    public boolean onUndo() {
+        return false;
+    }
+
+    @Override
+    public boolean onClear() {
+        return false;
+    }
+
+    @Override
+    public void onSetPicture(Bitmap bitmap, int canvasWidth, int canvasHeight) {
+
+    }
+
+    @Override
+    public boolean isDrawing() {
+        return false;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    private void onMove(MotionEvent event, CanvasView canvasView) {
+        float x = event.getX(event.getActionIndex());
+        float y = event.getY(event.getActionIndex());
+        pointer.set(x, y);
+        tryColor();
+        canvasView.invalidate();
     }
 
     private void tryColor() {
