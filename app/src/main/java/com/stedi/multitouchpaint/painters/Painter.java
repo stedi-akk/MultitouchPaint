@@ -1,4 +1,4 @@
-package com.stedi.multitouchpaint.painter;
+package com.stedi.multitouchpaint.painters;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,7 +7,13 @@ import android.view.MotionEvent;
 import com.stedi.multitouchpaint.data.Brush;
 import com.stedi.multitouchpaint.view.CanvasView;
 
-public abstract class BasePainter {
+public abstract class Painter {
+    public void onAttach(CanvasView canvasView) {
+    }
+
+    public void onDetach(CanvasView canvasView) {
+    }
+
     public void onPointerDown(MotionEvent event, Brush brush, CanvasView canvasView) {
     }
 
@@ -17,7 +23,7 @@ public abstract class BasePainter {
     public void onPointerUp(MotionEvent event, Brush brush, CanvasView canvasView) {
     }
 
-    public void onDraw(Canvas viewCanvas) {
+    public void onDraw(Canvas canvas) {
     }
 
     public void onSetPicture(Bitmap bitmap, int canvasWidth, int canvasHeight) {

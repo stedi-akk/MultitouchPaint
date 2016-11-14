@@ -1,4 +1,4 @@
-package com.stedi.multitouchpaint.painter;
+package com.stedi.multitouchpaint.painters;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,7 +16,7 @@ import com.stedi.multitouchpaint.view.CanvasView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PathPainter extends BasePainter {
+public class PathPainter extends Painter {
     private static PathPainter instance;
 
     private ArrayList<HistoryItem> history = new ArrayList<>();
@@ -100,7 +100,7 @@ public class PathPainter extends BasePainter {
     }
 
     @Override
-    public void onDraw(Canvas viewCanvas) {
+    public void onDraw(Canvas canvas) {
         // update history bitmap and old bitmap (if needed) on undo
         if (invalidateOnUndo) {
             invalidateOnUndo = false;
@@ -120,14 +120,14 @@ public class PathPainter extends BasePainter {
 
         // draw bitmap containing deleted items (from cached bitmap)
         if (oldBitmap != null) {
-            viewCanvas.drawBitmap(oldBitmap, 0, 0, null);
+            canvas.drawBitmap(oldBitmap, 0, 0, null);
         }
 
         // draw items which was previously current on history bitmap
         for (HistoryItem item : history) {
             if (item.getStatus() == HistoryItem.Status.ON_BITMAP_CANVAS) {
                 if (historyBitmap == null) {
-                    historyBitmap = Bitmap.createBitmap(viewCanvas.getWidth(), viewCanvas.getHeight(), Bitmap.Config.ARGB_8888);
+                    historyBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
                     historyCanvas = new Canvas(historyBitmap);
                 }
 
@@ -138,13 +138,13 @@ public class PathPainter extends BasePainter {
 
         // draw bitmap containing history items (and more, if no undo was done)
         if (historyBitmap != null) {
-            viewCanvas.drawBitmap(historyBitmap, 0, 0, null);
+            canvas.drawBitmap(historyBitmap, 0, 0, null);
         }
 
         // draw only current pointers on view canvas
         for (HistoryItem item : history) {
             if (item.getStatus() == HistoryItem.Status.ON_VIEW_CANVAS) {
-                drawHistoryItem(item, viewCanvas);
+                drawHistoryItem(item, canvas);
             }
         }
 
@@ -154,7 +154,7 @@ public class PathPainter extends BasePainter {
             HistoryItem item = history.get(0);
             if (item.getStatus() == HistoryItem.Status.READY_TO_DELETE) {
                 if (cachedOldBitmap == null) {
-                    cachedOldBitmap = Bitmap.createBitmap(viewCanvas.getWidth(), viewCanvas.getHeight(), Bitmap.Config.ARGB_8888);
+                    cachedOldBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
                     cachedOldCanvas = new Canvas(cachedOldBitmap);
                 }
 

@@ -9,10 +9,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.stedi.multitouchpaint.data.Brush;
-import com.stedi.multitouchpaint.painter.BasePainter;
+import com.stedi.multitouchpaint.painters.Painter;
 
 public class CanvasView extends View {
-    private BasePainter painter;
+    private Painter painter;
     private Brush brush;
 
     public CanvasView(Context context) {
@@ -28,12 +28,15 @@ public class CanvasView extends View {
         setBackgroundColor(Color.WHITE);
     }
 
-    public void setPainter(BasePainter painter) {
+    public void setPainter(Painter painter) {
+        if (this.painter != null)
+            this.painter.onDetach(this);
         this.painter = painter;
+        this.painter.onAttach(this);
         invalidate();
     }
 
-    public BasePainter getPainter() {
+    public Painter getPainter() {
         return painter;
     }
 

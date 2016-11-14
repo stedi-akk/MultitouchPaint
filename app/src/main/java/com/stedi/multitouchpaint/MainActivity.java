@@ -21,8 +21,8 @@ import com.stedi.multitouchpaint.dialogs.BrushThicknessDialog;
 import com.stedi.multitouchpaint.dialogs.ExitDialog;
 import com.stedi.multitouchpaint.dialogs.FileWorkDialog;
 import com.stedi.multitouchpaint.dialogs.WaitDialog;
-import com.stedi.multitouchpaint.painter.PathPainter;
-import com.stedi.multitouchpaint.painter.PipettePainter;
+import com.stedi.multitouchpaint.painters.PathPainter;
+import com.stedi.multitouchpaint.painters.PipettePainter;
 import com.stedi.multitouchpaint.view.CanvasView;
 import com.stedi.multitouchpaint.view.WorkPanel;
 
@@ -37,6 +37,7 @@ public class MainActivity extends Activity {
 
     @BindView(R.id.main_activity_canvas_view)
     CanvasView canvasView;
+
     @BindView(R.id.main_activity_work_panel)
     WorkPanel workPanel;
 

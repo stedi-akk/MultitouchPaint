@@ -57,6 +57,7 @@ public class BitmapSaver extends Thread {
     }
 
     private void postCallback(Callback callback) {
+        target.recycle();
         PendingRunnables.getInstance().post(() -> App.getBus().post(callback));
     }
 }

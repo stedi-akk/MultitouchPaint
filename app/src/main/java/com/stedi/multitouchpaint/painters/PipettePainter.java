@@ -1,4 +1,4 @@
-package com.stedi.multitouchpaint.painter;
+package com.stedi.multitouchpaint.painters;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -13,7 +13,7 @@ import com.stedi.multitouchpaint.data.Brush;
 import com.stedi.multitouchpaint.data.Pointer;
 import com.stedi.multitouchpaint.view.CanvasView;
 
-public class PipettePainter extends BasePainter {
+public class PipettePainter extends Painter {
     private final float headRadius = App.dp2px(25);
     private final float needleLength = App.dp2px(50);
     private final float needleEnlargement = App.dp2px(8);
@@ -59,12 +59,12 @@ public class PipettePainter extends BasePainter {
     }
 
     @Override
-    public void onDraw(Canvas viewCanvas) {
-        viewCanvas.drawBitmap(bitmap, 0, 0, null);
+    public void onDraw(Canvas canvas) {
+        canvas.drawBitmap(bitmap, 0, 0, null);
 
         float x = pointer.getX();
         float y = pointer.getY();
-        int xCorner = x + needleLength + headRadius > viewCanvas.getWidth() ? -1 : 1;
+        int xCorner = x + needleLength + headRadius > canvas.getWidth() ? -1 : 1;
         int yCorner = y - needleLength - headRadius < 0 ? -1 : 1;
 
         for (int step = 1; step <= 2; step++) {
@@ -72,7 +72,7 @@ public class PipettePainter extends BasePainter {
             float fakeOuterStroke = step == 1 ? shadowWidth : 0;
 
             // head
-            viewCanvas.drawCircle(x + needleLength * xCorner, y - needleLength * yCorner,
+            canvas.drawCircle(x + needleLength * xCorner, y - needleLength * yCorner,
                     headRadius + fakeOuterStroke / 1.5f, paint);
 
             // needle
@@ -82,7 +82,7 @@ public class PipettePainter extends BasePainter {
             needlePath.lineTo(x + (needleLength + needleEnlargement + fakeOuterStroke) * xCorner,
                     y + (-needleLength + needleEnlargement + fakeOuterStroke) * yCorner);
             needlePath.close();
-            viewCanvas.drawPath(needlePath, paint);
+            canvas.drawPath(needlePath, paint);
             needlePath.reset();
 
             // inner circle with color
@@ -91,11 +91,16 @@ public class PipettePainter extends BasePainter {
                     paint.setColor(innerStep == 1 ? innerStrokeColor : color);
                     float fakeInnerStroke = innerStep == 1 ? innerStrokeWidth : 0;
 
-                    viewCanvas.drawCircle(x + needleLength * xCorner, y - needleLength * yCorner,
+                    canvas.drawCircle(x + needleLength * xCorner, y - needleLength * yCorner,
                             innerRadius + fakeInnerStroke, paint);
                 }
             }
         }
+    }
+
+    @Override
+    public void onDetach(CanvasView canvasView) {
+        bitmap.recycle();
     }
 
     private void onMove(MotionEvent event, CanvasView canvasView) {
