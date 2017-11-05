@@ -1,6 +1,7 @@
 package com.stedi.multitouchpaint.dialogs;
 
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,20 @@ abstract class BaseDialog extends DialogFragment {
         View root = inflater.inflate(layoutResId, parent, false);
         unbinder = ButterKnife.bind(this, root);
         return root;
+    }
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        try {
+            super.show(manager, tag);
+        } catch (IllegalStateException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void dismiss() {
+        super.dismissAllowingStateLoss();
     }
 
     @Override
