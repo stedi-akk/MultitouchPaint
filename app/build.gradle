@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 25
@@ -11,20 +12,17 @@ android {
         targetSdkVersion 25
         versionCode 7
         versionName "2.5"
+        manifestPlaceholders = [crashlyticsKey: getLocalProperty("crashlyticsKey")]
     }
 
     signingConfigs {
         release {
-            def propsFile = new File("local.properties")
-            if (propsFile.exists()) {
-                Properties props = new Properties()
-                props.load(new FileInputStream(propsFile))
-                if (props['storeFile'] != null && !props['storeFile'].isEmpty()) {
-                    storeFile = file(props['storeFile'])
-                    keyAlias = props['keyAlias']
-                    storePassword = props['storePassword']
-                    keyPassword = props['keyPassword']
-                }
+            def storeFileProp = getLocalProperty('storeFile')
+            if (!storeFileProp.isEmpty()) {
+                storeFile = file(storeFileProp)
+                keyAlias = getLocalProperty('keyAlias')
+                storePassword = getLocalProperty('storePassword')
+                keyPassword = getLocalProperty('keyPassword')
             }
         }
     }
@@ -36,11 +34,13 @@ android {
 
     buildTypes {
         debug {
+            ext.enableCrashlytics = false
             minifyEnabled false
             applicationIdSuffix ".debug"
             versionNameSuffix "-DBG"
         }
         release {
+            ext.enableCrashlytics = true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -48,10 +48,35 @@ android {
     }
 }
 
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 dependencies {
     compile 'com.android.support:support-v4:25.4.0'
     compile "com.github.danielnilsson9:color-picker-view:1.4.0@aar"
+
     compile 'com.squareup:otto:1.3.8'
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true;
+    }
+}
+
+def getLocalProperty(String propertyName) {
+    def propsFile = rootProject.file('local.properties')
+    if (propsFile.exists()) {
+        def props = new Properties()
+        props.load(new FileInputStream(propsFile))
+        def retProp = props[propertyName]
+        if (retProp != null) {
+            return retProp
+        } else {
+            return ""
+        }
+    } else {
+        return ""
+    }
 }
