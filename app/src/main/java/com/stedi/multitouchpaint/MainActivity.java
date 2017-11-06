@@ -87,15 +87,8 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (canvasView.getPainter() instanceof PipettePainter) {
-            PipettePainter pipettePainter = (PipettePainter) canvasView.getPainter();
-            Brush newBrush = Brush.copy(brush);
-            newBrush.setColor(pipettePainter.getColor());
-            App.getBus().post(newBrush);
-            canvasView.setPainter(PathPainter.getInstance());
-            workPanel.show();
+        if (onPipettePainterBackPressed())
             return;
-        }
         if (workPanel.isShown())
             workPanel.hide();
         else
@@ -235,5 +228,20 @@ public class MainActivity extends Activity {
             return false;
         }
         return true;
+    }
+
+    private boolean onPipettePainterBackPressed() {
+        if (canvasView.getPainter() instanceof PipettePainter) {
+            PipettePainter pipettePainter = (PipettePainter) canvasView.getPainter();
+            if (!pipettePainter.isDrawing()) {
+                Brush newBrush = Brush.copy(brush);
+                newBrush.setColor(pipettePainter.getColor());
+                App.getBus().post(newBrush);
+                canvasView.setPainter(PathPainter.getInstance());
+                workPanel.show();
+            }
+            return true;
+        }
+        return false;
     }
 }

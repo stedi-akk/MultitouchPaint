@@ -6,7 +6,10 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Bus;
+
+import io.fabric.sdk.android.Fabric;
 
 public class App extends Application {
     private static final String LOG_TAG = "Multitouch Paint";
@@ -18,6 +21,9 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(this, new Crashlytics());
+        }
         instance = this;
         bus = new Bus();
     }

@@ -13,6 +13,8 @@ import com.stedi.multitouchpaint.data.Brush;
 import com.stedi.multitouchpaint.data.Pointer;
 import com.stedi.multitouchpaint.view.CanvasView;
 
+import java.util.HashSet;
+
 public class PipettePainter extends Painter {
     private final float headRadius = App.dp2px(25);
     private final float needleLength = App.dp2px(50);
@@ -24,6 +26,8 @@ public class PipettePainter extends Painter {
     private final int fillColor = Color.WHITE;
     private final int shadowColor = App.getContext().getResources().getColor(R.color.material_shadow);
     private final int innerStrokeColor = App.getContext().getResources().getColor(R.color.medium_gray);
+
+    private HashSet<Integer> currentPointers = new HashSet<>();
 
     private Bitmap bitmap;
     private Pointer pointer;
@@ -50,12 +54,18 @@ public class PipettePainter extends Painter {
 
     @Override
     public void onPointerDown(MotionEvent event, Brush brush, CanvasView canvasView) {
+        currentPointers.add(event.getPointerId(event.getActionIndex()));
         onMove(event, canvasView);
     }
 
     @Override
     public void onPointerMove(MotionEvent event, Brush brush, CanvasView canvasView) {
         onMove(event, canvasView);
+    }
+
+    @Override
+    public void onPointerUp(MotionEvent event, Brush brush, CanvasView canvasView) {
+        currentPointers.remove(event.getPointerId(event.getActionIndex()));
     }
 
     @Override
@@ -101,6 +111,11 @@ public class PipettePainter extends Painter {
     @Override
     public void onDetach(CanvasView canvasView) {
         bitmap.recycle();
+    }
+
+    @Override
+    public boolean isDrawing() {
+        return !currentPointers.isEmpty();
     }
 
     private void onMove(MotionEvent event, CanvasView canvasView) {
