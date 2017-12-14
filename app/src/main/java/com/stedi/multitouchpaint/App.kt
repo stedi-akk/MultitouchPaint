@@ -1,6 +1,7 @@
 package com.stedi.multitouchpaint
 
 import android.app.Application
+import android.content.Context
 import android.graphics.Color
 import android.util.Log
 import android.util.TypedValue
@@ -24,7 +25,7 @@ class App : Application() {
         val maxTouchHistory = 50
         val fileNamePrefix = "multitouch_paint_"
 
-        fun getContext() = instance.applicationContext
+        fun getContext(): Context = instance.applicationContext
 
         fun getBus() = instance.bus
 

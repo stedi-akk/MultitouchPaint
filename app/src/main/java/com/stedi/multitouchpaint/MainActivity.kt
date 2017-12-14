@@ -49,12 +49,12 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-        PendingRunnables.getInstance().onResume()
+        PendingRunnables.release()
     }
 
     override fun onPause() {
         super.onPause()
-        PendingRunnables.getInstance().onPause()
+        PendingRunnables.hold()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
