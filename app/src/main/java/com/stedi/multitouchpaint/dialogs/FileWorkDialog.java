@@ -26,7 +26,7 @@ public class FileWorkDialog extends BaseDialog {
         View root = inflater.inflate(R.layout.file_work_dialog, container, false);
         for (Callback callback : Callback.values())
             root.findViewById(callback.buttonResId).setOnClickListener(v -> {
-                App.getBus().post(callback);
+                App.Companion.getBus().post(callback);
                 dismiss();
             });
         return root;

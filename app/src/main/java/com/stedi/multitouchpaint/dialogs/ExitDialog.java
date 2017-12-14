@@ -22,7 +22,7 @@ public class ExitDialog extends BaseDialog {
     @OnClick({R.id.done, R.id.cancel})
     public void onButtonsClick(View v) {
         if (v.getId() == R.id.done)
-            App.getBus().post(new Callback());
+            App.Companion.getBus().post(new Callback());
         dismiss();
     }
 }

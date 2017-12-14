@@ -56,7 +56,7 @@ public class BrushColorDialog extends BaseDialog implements ColorPickerView.OnCo
     public void onButtonsClick(View v) {
         if (v.getId() == R.id.done) {
             brush.setColor(colorTo.getColor());
-            App.getBus().post(brush);
+            App.Companion.getBus().post(brush);
         }
         dismiss();
     }

@@ -16,16 +16,16 @@ import com.stedi.multitouchpaint.view.CanvasView;
 import java.util.HashSet;
 
 public class PipettePainter extends Painter {
-    private final float headRadius = App.dp2px(25);
-    private final float needleLength = App.dp2px(50);
-    private final float needleEnlargement = App.dp2px(8);
-    private final float innerRadius = App.dp2px(20);
-    private final float innerStrokeWidth = App.dp2px(0.5f);
-    private final float shadowWidth = App.dp2px(2);
+    private final float headRadius = App.Companion.dp2px(25);
+    private final float needleLength = App.Companion.dp2px(50);
+    private final float needleEnlargement = App.Companion.dp2px(8);
+    private final float innerRadius = App.Companion.dp2px(20);
+    private final float innerStrokeWidth = App.Companion.dp2px(0.5f);
+    private final float shadowWidth = App.Companion.dp2px(2);
 
     private final int fillColor = Color.WHITE;
-    private final int shadowColor = App.getContext().getResources().getColor(R.color.material_shadow);
-    private final int innerStrokeColor = App.getContext().getResources().getColor(R.color.medium_gray);
+    private final int shadowColor = App.Companion.getContext().getResources().getColor(R.color.material_shadow);
+    private final int innerStrokeColor = App.Companion.getContext().getResources().getColor(R.color.medium_gray);
 
     private HashSet<Integer> currentPointers = new HashSet<>();
 

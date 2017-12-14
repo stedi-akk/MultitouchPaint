@@ -60,7 +60,7 @@ public class WorkPanel extends FrameLayout {
         LayoutInflater.from(context).inflate(R.layout.work_panel, this, true);
         ButterKnife.bind(this);
         for (Callback callback : Callback.values())
-            findViewById(callback.buttonId).setOnClickListener(v -> App.getBus().post(callback));
+            findViewById(callback.buttonId).setOnClickListener(v -> App.Companion.getBus().post(callback));
     }
 
     public void setBrush(Brush brush) {

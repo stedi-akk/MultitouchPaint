@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.view.MotionEvent;
 
-import com.stedi.multitouchpaint.Config;
+import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.data.Brush;
 import com.stedi.multitouchpaint.data.HistoryItem;
 import com.stedi.multitouchpaint.data.Pointer;
@@ -71,8 +71,8 @@ public class PathPainter extends Painter {
             float x = event.getX(i);
             float y = event.getY(i);
 
-            if (Math.abs(x - pointer.getX()) >= Config.TOUCH_MOVE_ACCURACY ||
-                    Math.abs(y - pointer.getY()) >= Config.TOUCH_MOVE_ACCURACY) {
+            if (Math.abs(x - pointer.getX()) >= App.Companion.getTouchMoveAccuracy() ||
+                    Math.abs(y - pointer.getY()) >= App.Companion.getTouchMoveAccuracy()) {
                 HistoryItem item = pointerDownItems.get(pointerId);
 
                 // draw smooth path
@@ -150,7 +150,7 @@ public class PathPainter extends Painter {
 
         // remove and cache in bitmap old history item
         // only one per onDraw()
-        if (history.size() > Config.MAX_TOUCH_HISTORY) {
+        if (history.size() > App.Companion.getMaxTouchHistory()) {
             HistoryItem item = history.get(0);
             if (item.getStatus() == HistoryItem.Status.READY_TO_DELETE) {
                 if (cachedOldBitmap == null) {

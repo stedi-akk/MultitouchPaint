@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Environment;
 
 import com.stedi.multitouchpaint.App;
-import com.stedi.multitouchpaint.Config;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,12 +32,12 @@ public class BitmapSaver extends Thread {
             if (!dirAvailable)
                 dirAvailable = dir.mkdirs();
             if (dirAvailable) {
-                String fileName = Config.FILE_NAME_PREFIX + System.currentTimeMillis() + ".png";
+                String fileName = App.Companion.getFileNamePrefix() + System.currentTimeMillis() + ".png";
                 File file = new File(dir, fileName);
                 try {
                     FileOutputStream fos = new FileOutputStream(file);
                     if (target.compress(Bitmap.CompressFormat.PNG, 100, fos)) {
-                        App.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+                        App.Companion.getContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
                         postCallback(Callback.BITMAP_SAVED);
                     } else {
                         postCallback(Callback.FAILED_TO_SAVE);
@@ -58,6 +57,6 @@ public class BitmapSaver extends Thread {
 
     private void postCallback(Callback callback) {
         target.recycle();
-        PendingRunnables.getInstance().post(() -> App.getBus().post(callback));
+        PendingRunnables.getInstance().post(() -> App.Companion.getBus().post(callback));
     }
 }

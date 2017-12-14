@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.stedi.multitouchpaint.App;
-import com.stedi.multitouchpaint.Config;
 
 public class Brush implements Parcelable {
     private float thicknessPx;
@@ -12,7 +11,7 @@ public class Brush implements Parcelable {
     private int color;
 
     public static Brush createDefault() {
-        return new Brush(Config.DEFAULT_BRUSH_THICKNESS, Config.DEFAULT_BRUSH_COLOR);
+        return new Brush(App.Companion.getDefaultBrushThickness(), App.Companion.getDefaultBrushColor());
     }
 
     public static Brush copy(Brush target) {
@@ -31,7 +30,7 @@ public class Brush implements Parcelable {
 
     public void setThickness(int thicknessDp) {
         this.thicknessDp = thicknessDp;
-        thicknessPx = App.dp2px(this.thicknessDp);
+        thicknessPx = App.Companion.dp2px(this.thicknessDp);
     }
 
     public int getThicknessDp() {
