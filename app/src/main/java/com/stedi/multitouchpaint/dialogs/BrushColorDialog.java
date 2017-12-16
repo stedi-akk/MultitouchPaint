@@ -25,7 +25,7 @@ public class BrushColorDialog extends BaseDialog implements ColorPickerView.OnCo
 
     public static BrushColorDialog newInstance(Brush brush) {
         Bundle args = new Bundle();
-        args.putParcelable(KEY_BRUSH, brush);
+        args.putSerializable(KEY_BRUSH, brush);
         BrushColorDialog dialog = new BrushColorDialog();
         dialog.setArguments(args);
         return dialog;
@@ -35,11 +35,11 @@ public class BrushColorDialog extends BaseDialog implements ColorPickerView.OnCo
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = butterKnifeInflate(inflater, R.layout.brush_color_dialog, container);
 
-        Brush argsBrush = getArguments().getParcelable(KEY_BRUSH);
+        Brush argsBrush = (Brush) getArguments().getSerializable(KEY_BRUSH);
         if (argsBrush != null)
-            brush = Brush.copy(argsBrush);
+            brush = argsBrush.copy(argsBrush.getThicknessDp(), argsBrush.getColor());
         else
-            brush = Brush.createDefault();
+            brush = App.Companion.getDefaultBrush();
 
         ColorPickerView colorPicker = ButterKnife.findById(root, R.id.brush_color_dialog_color_picker);
         colorPicker.setColor(brush.getColor());

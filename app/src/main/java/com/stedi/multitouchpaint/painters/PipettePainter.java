@@ -121,7 +121,8 @@ public class PipettePainter extends Painter {
     private void onMove(MotionEvent event, CanvasView canvasView) {
         float x = event.getX(event.getActionIndex());
         float y = event.getY(event.getActionIndex());
-        pointer.set(x, y);
+        pointer.setX(x);
+        pointer.setY(y);
         tryColor();
         canvasView.invalidate();
     }

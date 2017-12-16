@@ -41,7 +41,7 @@ class MainActivity : Activity() {
         App.getBus().register(this)
         setContentView(R.layout.main_activity)
         ButterKnife.bind(this)
-        brush = savedInstanceState?.getParcelable(KEY_BRUSH) ?: Brush.createDefault()
+        brush = savedInstanceState?.getSerializable(KEY_BRUSH) as Brush? ?: App.getDefaultBrush()
         canvasView.setBrush(brush)
         canvasView.setPainter(PathPainter.getInstance())
         workPanel.setBrush(brush)
@@ -59,7 +59,7 @@ class MainActivity : Activity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(KEY_BRUSH, brush)
+        outState.putSerializable(KEY_BRUSH, brush)
     }
 
     override fun onDestroy() {
@@ -188,9 +188,7 @@ class MainActivity : Activity() {
         val painter = canvasView.getPainter()
         if (painter is PipettePainter) {
             if (!painter.isDrawing()) {
-                val newBrush = Brush.copy(brush)
-                newBrush.setColor(painter.getColor())
-                App.getBus().post(newBrush)
+                App.getBus().post(brush.copy(color = painter.getColor()))
                 canvasView.setPainter(PathPainter.getInstance())
                 workPanel.show()
             }

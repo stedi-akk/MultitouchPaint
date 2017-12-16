@@ -25,7 +25,7 @@ public class BrushThicknessDialog extends BaseDialog implements SeekBar.OnSeekBa
 
     public static BrushThicknessDialog newInstance(Brush brush) {
         Bundle args = new Bundle();
-        args.putParcelable(KEY_BRUSH, brush);
+        args.putSerializable(KEY_BRUSH, brush);
         BrushThicknessDialog dialog = new BrushThicknessDialog();
         dialog.setArguments(args);
         return dialog;
@@ -35,11 +35,11 @@ public class BrushThicknessDialog extends BaseDialog implements SeekBar.OnSeekBa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = butterKnifeInflate(inflater, R.layout.brush_thickness_dialog, container);
 
-        Brush argsBrush = getArguments().getParcelable(KEY_BRUSH);
+        Brush argsBrush = (Brush) getArguments().getSerializable(KEY_BRUSH);
         if (argsBrush != null)
-            brush = Brush.copy(argsBrush);
+            brush = argsBrush.copy(argsBrush.getThicknessDp(), argsBrush.getColor());
         else
-            brush = Brush.createDefault();
+            brush = App.Companion.getDefaultBrush();
 
         SeekBar seekBar = ButterKnife.findById(root, R.id.brush_thickness_dialog_seekbar);
         seekBar.setMax(App.Companion.getMaxBrushThickness() - 1);
@@ -62,7 +62,7 @@ public class BrushThicknessDialog extends BaseDialog implements SeekBar.OnSeekBa
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        brush.setThickness(progress + 1);
+        brush.changeThickness(progress + 1);
         tvThicknessTo.setText(brush.getThicknessText());
     }
 

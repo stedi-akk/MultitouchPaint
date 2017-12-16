@@ -50,8 +50,7 @@ public class PathPainter extends Painter {
         float y = event.getY(actionIndex);
 
         // new history and pointer item
-        HistoryItem item = new HistoryItem(brush);
-        item.setStatus(HistoryItem.Status.ON_VIEW_CANVAS);
+        HistoryItem item = new HistoryItem(brush, new Path(), HistoryItem.Status.ON_VIEW_CANVAS);
         history.add(item);
         pointerDownItems.put(pointerId, item);
         currentPointers.put(pointerId, new Pointer(x + 0.1f, y));
@@ -81,7 +80,8 @@ public class PathPainter extends Painter {
                         (x + pointer.getX()) / 2, (y + pointer.getY()) / 2);
                 canvasView.invalidate();
 
-                pointer.set(x, y);
+                pointer.setX(x);
+                pointer.setY(y);
             }
         }
     }

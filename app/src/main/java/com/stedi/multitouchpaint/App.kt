@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.widget.Toast
 import com.crashlytics.android.Crashlytics
 import com.squareup.otto.Bus
+import com.stedi.multitouchpaint.data.Brush
 import io.fabric.sdk.android.Fabric
 
 class App : Application() {
@@ -18,12 +19,13 @@ class App : Application() {
 
         private lateinit var instance: App
 
-        val defaultBrushColor = Color.parseColor("#F44336")
-        val defaultBrushThickness = 10
         val maxBrushThickness = 100
         val touchMoveAccuracy = 3f
         val maxTouchHistory = 50
         val fileNamePrefix = "multitouch_paint_"
+        val thicknessSufix = "dp"
+
+        fun getDefaultBrush() = Brush(10, Color.parseColor("#F44336"))
 
         fun getContext(): Context = instance.applicationContext
 
