@@ -90,7 +90,7 @@ class MainActivity : Activity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_GET_IMAGE) {
-            WaitDialog.start(fragmentManager)
+            WaitDialog.show(fragmentManager)
             BitmapGetter(data.data, canvasView.width, canvasView.height).start()
         }
     }
@@ -144,7 +144,7 @@ class MainActivity : Activity() {
 
     @Subscribe
     fun onBitmapSaverEvent(callback: BitmapSaver.Callback) {
-        WaitDialog.stop(fragmentManager)
+        WaitDialog.dismiss(fragmentManager)
         when (callback) {
             BitmapSaver.Callback.BITMAP_SAVED -> App.showToast(R.string.image_successfully_saved)
             BitmapSaver.Callback.FAILED_TO_SAVE -> App.showToast(R.string.failed_to_save_image)
@@ -154,7 +154,7 @@ class MainActivity : Activity() {
 
     @Subscribe
     fun onGalleryBitmapGetterEvent(callback: BitmapGetter.Callback) {
-        WaitDialog.stop(fragmentManager)
+        WaitDialog.dismiss(fragmentManager)
         if (callback.bitmap != null) {
             canvasView.setPicture(callback.bitmap)
         } else {
@@ -163,7 +163,7 @@ class MainActivity : Activity() {
     }
 
     private fun saveCanvasViewImage() {
-        WaitDialog.start(fragmentManager)
+        WaitDialog.show(fragmentManager)
         BitmapSaver(canvasView.generatePicture()).start()
     }
 
