@@ -11,7 +11,6 @@ import com.stedi.multitouchpaint.App;
 import com.stedi.multitouchpaint.data.Brush;
 import com.stedi.multitouchpaint.data.HistoryItem;
 import com.stedi.multitouchpaint.data.Pointer;
-import com.stedi.multitouchpaint.view.CanvasView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +42,7 @@ public class PathPainter extends Painter {
     }
 
     @Override
-    public void onPointerDown(MotionEvent event, Brush brush, CanvasView canvasView) {
+    public void onPointerDown(MotionEvent event, Brush brush) {
         int actionIndex = event.getActionIndex();
         int pointerId = event.getPointerId(actionIndex);
         float x = event.getX(actionIndex);
@@ -59,11 +58,11 @@ public class PathPainter extends Painter {
         Path path = item.getPath();
         path.moveTo(x, y);
         path.lineTo(x + 0.1f, y);
-        canvasView.invalidate();
+        getCanvasView().invalidate();
     }
 
     @Override
-    public void onPointerMove(MotionEvent event, Brush brush, CanvasView canvasView) {
+    public void onPointerMove(MotionEvent event, Brush brush) {
         for (int i = 0; i < event.getPointerCount(); i++) {
             int pointerId = event.getPointerId(i);
             Pointer pointer = currentPointers.get(pointerId);
@@ -78,7 +77,7 @@ public class PathPainter extends Painter {
                 Path path = item.getPath();
                 path.quadTo(pointer.getX(), pointer.getY(),
                         (x + pointer.getX()) / 2, (y + pointer.getY()) / 2);
-                canvasView.invalidate();
+                getCanvasView().invalidate();
 
                 pointer.setX(x);
                 pointer.setY(y);
@@ -87,7 +86,7 @@ public class PathPainter extends Painter {
     }
 
     @Override
-    public void onPointerUp(MotionEvent event, Brush brush, CanvasView canvasView) {
+    public void onPointerUp(MotionEvent event, Brush brush) {
         int pointerId = event.getPointerId(event.getActionIndex());
 
         HistoryItem item = pointerDownItems.get(pointerId);
@@ -96,7 +95,7 @@ public class PathPainter extends Painter {
         pointerDownItems.remove(pointerId);
         currentPointers.remove(pointerId);
 
-        canvasView.invalidate();
+        getCanvasView().invalidate();
     }
 
     @Override
@@ -196,8 +195,8 @@ public class PathPainter extends Painter {
     }
 
     @Override
-    public void onSetPicture(Bitmap bitmap, int canvasWidth, int canvasHeight) {
-        cachedOldBitmap = Bitmap.createScaledBitmap(bitmap, canvasWidth, canvasHeight, true);
+    public void onSetPicture(Bitmap bitmap) {
+        cachedOldBitmap = Bitmap.createScaledBitmap(bitmap, getCanvasView().getWidth(), getCanvasView().getHeight(), true);
         if (!cachedOldBitmap.isMutable())
             cachedOldBitmap = cachedOldBitmap.copy(Bitmap.Config.ARGB_8888, true);
         cachedOldCanvas = new Canvas(cachedOldBitmap);

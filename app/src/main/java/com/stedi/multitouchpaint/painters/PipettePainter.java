@@ -53,18 +53,18 @@ public class PipettePainter extends Painter {
     }
 
     @Override
-    public void onPointerDown(MotionEvent event, Brush brush, CanvasView canvasView) {
+    public void onPointerDown(MotionEvent event, Brush brush) {
         currentPointers.add(event.getPointerId(event.getActionIndex()));
-        onMove(event, canvasView);
+        onMove(event, getCanvasView());
     }
 
     @Override
-    public void onPointerMove(MotionEvent event, Brush brush, CanvasView canvasView) {
-        onMove(event, canvasView);
+    public void onPointerMove(MotionEvent event, Brush brush) {
+        onMove(event, getCanvasView());
     }
 
     @Override
-    public void onPointerUp(MotionEvent event, Brush brush, CanvasView canvasView) {
+    public void onPointerUp(MotionEvent event, Brush brush) {
         currentPointers.remove(event.getPointerId(event.getActionIndex()));
     }
 
@@ -110,6 +110,7 @@ public class PipettePainter extends Painter {
 
     @Override
     public void onDetach(CanvasView canvasView) {
+        super.onDetach(canvasView);
         bitmap.recycle();
     }
 

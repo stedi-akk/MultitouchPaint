@@ -38,15 +38,15 @@ class CanvasView : View {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         return when (event.actionMasked) {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
-                painter.onPointerDown(event, brush, this)
+                painter.onPointerDown(event, brush)
                 true
             }
             MotionEvent.ACTION_MOVE -> {
-                painter.onPointerMove(event, brush, this)
+                painter.onPointerMove(event, brush)
                 true
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
-                painter.onPointerUp(event, brush, this)
+                painter.onPointerUp(event, brush)
                 true
             }
             else -> false
@@ -69,7 +69,7 @@ class CanvasView : View {
         }
     }
 
-    fun isDrawing() = painter.isDrawing
+    fun isDrawing() = painter.isDrawing()
 
     fun generatePicture(): Bitmap {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -79,7 +79,7 @@ class CanvasView : View {
 
     fun setPicture(bitmap: Bitmap) {
         clearPicture()
-        painter.onSetPicture(bitmap, width, height)
+        painter.onSetPicture(bitmap)
         invalidate()
     }
 }
