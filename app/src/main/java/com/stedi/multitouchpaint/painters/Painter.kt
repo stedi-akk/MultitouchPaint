@@ -45,4 +45,8 @@ abstract class Painter {
     open fun onClear() = false
 
     open fun isDrawing() = false
+
+    protected fun requestInvalidate() {
+        this.canvasView?.invalidate()
+    }
 }
