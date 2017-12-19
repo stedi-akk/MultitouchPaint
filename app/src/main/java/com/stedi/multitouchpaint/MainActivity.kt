@@ -43,7 +43,7 @@ class MainActivity : Activity() {
         ButterKnife.bind(this)
         brush = savedInstanceState?.getSerializable(KEY_BRUSH) as Brush? ?: App.getDefaultBrush()
         canvasView.setBrush(brush)
-        canvasView.setPainter(PathPainter.getInstance())
+        canvasView.setPainter(PathPainter)
         workPanel.setBrush(brush)
     }
 
@@ -189,7 +189,7 @@ class MainActivity : Activity() {
         if (painter is PipettePainter) {
             if (!painter.isDrawing()) {
                 App.getBus().post(brush.copy(color = painter.getColor()))
-                canvasView.setPainter(PathPainter.getInstance())
+                canvasView.setPainter(PathPainter)
                 workPanel.show()
             }
             return true

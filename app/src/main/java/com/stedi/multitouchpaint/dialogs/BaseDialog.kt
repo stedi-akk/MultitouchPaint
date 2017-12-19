@@ -27,7 +27,7 @@ abstract class BaseDialog : DialogFragment() {
     override fun show(manager: FragmentManager, tag: String) {
         try {
             super.show(manager, tag)
-        } catch (e: IllegalStateException) { // it happens...
+        } catch (e: IllegalStateException) { // it happens. dunno why...
             e.printStackTrace()
         }
     }
