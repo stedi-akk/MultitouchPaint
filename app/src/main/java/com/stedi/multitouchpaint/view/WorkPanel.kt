@@ -44,7 +44,7 @@ class WorkPanel : FrameLayout {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         LayoutInflater.from(context).inflate(R.layout.work_panel, this, true)
         ButterKnife.bind(this)
-        Callback.values().forEach { callback -> findViewById<View>(callback.buttonId).setOnClickListener { App.getBus().post(callback) } }
+        Callback.values().forEach { callback -> findViewById<View>(callback.buttonId).setOnClickListener { App.BUS.post(callback) } }
     }
 
     fun setBrush(brush: Brush) {

@@ -30,7 +30,7 @@ class BitmapGetter(private val imageUri: Uri, private val width: Int, private va
             e.printStackTrace()
         }
 
-        PendingRunnables.post(Runnable { App.getBus().post(Callback(bitmap)) })
+        PendingRunnables.post(Runnable { App.BUS.post(Callback(bitmap)) })
     }
 
     private fun calculateInSampleSize(options: BitmapFactory.Options, width: Int, height: Int): Int {

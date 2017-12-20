@@ -56,8 +56,8 @@ object PathPainter : Painter() {
             val x = event.getX(i)
             val y = event.getY(i)
 
-            if (Math.abs(x - pointer.x) >= App.touchMoveAccuracy ||
-                    Math.abs(y - pointer.y) >= App.touchMoveAccuracy) {
+            if (Math.abs(x - pointer.x) >= App.TOUCH_MOVE_ACCURACY ||
+                    Math.abs(y - pointer.y) >= App.TOUCH_MOVE_ACCURACY) {
                 val item = historyItemPerPointer.get(pointerId) ?: continue
 
                 // draw smooth path
@@ -93,7 +93,7 @@ object PathPainter : Painter() {
             invalidateOnUndo = false
 
             if (cachedOldBitmap != null && cachedOldBitmapUpdated) {
-                oldBitmap = cachedOldBitmap!!.copy(Bitmap.Config.ARGB_8888, false)
+                oldBitmap = cachedOldBitmap!!.copy(App.BITMAP_CONFIG, false)
                 cachedOldBitmapUpdated = false
             }
 
@@ -114,7 +114,7 @@ object PathPainter : Painter() {
         for (item in historyItems) {
             if (item.status == HistoryItem.Status.ON_BITMAP_CANVAS) {
                 if (historyBitmap == null) {
-                    historyBitmap = Bitmap.createBitmap(canvas.width, canvas.height, Bitmap.Config.ARGB_8888)
+                    historyBitmap = Bitmap.createBitmap(canvas.width, canvas.height, App.BITMAP_CONFIG)
                     historyCanvas = Canvas(historyBitmap)
                 }
 
@@ -134,11 +134,11 @@ object PathPainter : Painter() {
 
         // remove and cache in bitmap old history item
         // only one per onDraw()
-        if (historyItems.size > App.maxTouchHistory) {
+        if (historyItems.size > App.MAX_TOUCH_HISTORY) {
             val item = historyItems[0]
             if (item.status == HistoryItem.Status.READY_TO_DELETE) {
                 if (cachedOldBitmap == null) {
-                    cachedOldBitmap = Bitmap.createBitmap(canvas.width, canvas.height, Bitmap.Config.ARGB_8888)
+                    cachedOldBitmap = Bitmap.createBitmap(canvas.width, canvas.height, App.BITMAP_CONFIG)
                     cachedOldCanvas = Canvas(cachedOldBitmap)
                 }
 
@@ -184,10 +184,10 @@ object PathPainter : Painter() {
         if (canvasView != null) {
             cachedOldBitmap = Bitmap.createScaledBitmap(bitmap, canvasView.width, canvasView.height, true)
             if (!cachedOldBitmap!!.isMutable) {
-                cachedOldBitmap = cachedOldBitmap!!.copy(Bitmap.Config.ARGB_8888, true)
+                cachedOldBitmap = cachedOldBitmap!!.copy(App.BITMAP_CONFIG, true)
             }
             cachedOldCanvas = Canvas(cachedOldBitmap)
-            oldBitmap = cachedOldBitmap!!.copy(Bitmap.Config.ARGB_8888, false)
+            oldBitmap = cachedOldBitmap!!.copy(App.BITMAP_CONFIG, false)
         }
     }
 

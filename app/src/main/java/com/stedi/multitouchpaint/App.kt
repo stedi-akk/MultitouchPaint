@@ -2,6 +2,7 @@ package com.stedi.multitouchpaint
 
 import android.app.Application
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.Log
 import android.util.TypedValue
@@ -12,24 +13,24 @@ import com.stedi.multitouchpaint.data.Brush
 import io.fabric.sdk.android.Fabric
 
 class App : Application() {
-    private val bus = Bus()
 
     companion object {
         private val LOG_TAG = "Multitouch Paint"
 
         private lateinit var instance: App
 
-        val maxBrushThickness = 100
-        val touchMoveAccuracy = 3f
-        val maxTouchHistory = 50
-        val fileNamePrefix = "multitouch_paint_"
-        val thicknessSufix = "dp"
+        val BUS = Bus()
 
-        fun getDefaultBrush() = Brush(10, Color.parseColor("#F44336"))
+        val MAX_BRUSH_THICKNESS = 100
+        val TOUCH_MOVE_ACCURACY = 3f
+        val MAX_TOUCH_HISTORY = 100
+        val FILE_NAME_PREFIX = "multitouch_paint_"
+        val THICKNESS_SUFIX = "dp"
+        val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
+
+        fun newDefaultBrush() = Brush(10, Color.parseColor("#F44336"))
 
         fun getContext(): Context = instance.applicationContext
-
-        fun getBus() = instance.bus
 
         fun log(text: String) {
             Log.d(LOG_TAG, text)
@@ -43,7 +44,7 @@ class App : Application() {
             Toast.makeText(instance, text, Toast.LENGTH_LONG).show()
         }
 
-        fun dp2px(dp: Float): Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, instance.resources.displayMetrics)
+        fun dp2px(dp: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, instance.resources.displayMetrics)
     }
 
     override fun onCreate() {

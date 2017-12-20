@@ -37,10 +37,7 @@ abstract class BaseDialog : DialogFragment() {
     }
 
     override fun onDestroyView() {
-        val unbinder = unbinder
-        if (unbinder != null) {
-            unbinder.unbind()
-        }
+        unbinder?.unbind()
         super.onDestroyView()
     }
 }

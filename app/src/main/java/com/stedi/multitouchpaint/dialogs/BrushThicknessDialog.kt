@@ -41,9 +41,9 @@ class BrushThicknessDialog : BaseDialog(), SeekBar.OnSeekBarChangeListener {
         val root = butterKnifeInflate(inflater, R.layout.brush_thickness_dialog, container)
 
         val argsBrush = arguments.getSerializable(KEY_BRUSH) as Brush?
-        brush = argsBrush?.copy() ?: App.getDefaultBrush()
+        brush = argsBrush?.copy() ?: App.newDefaultBrush()
 
-        seekBar.max = App.maxBrushThickness - 1
+        seekBar.max = App.MAX_BRUSH_THICKNESS - 1
         seekBar.setProgress(brush.getThicknessDp())
         seekBar.setOnSeekBarChangeListener(this)
 
@@ -56,7 +56,7 @@ class BrushThicknessDialog : BaseDialog(), SeekBar.OnSeekBarChangeListener {
     @OnClick(R.id.done, R.id.cancel)
     fun onButtonsClick(v: View) {
         if (v.id == R.id.done) {
-            App.getBus().post(brush)
+            App.BUS.post(brush)
         }
         dismiss()
     }

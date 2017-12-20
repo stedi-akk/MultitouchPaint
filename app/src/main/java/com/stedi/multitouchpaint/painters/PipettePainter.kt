@@ -30,7 +30,7 @@ class PipettePainter(private val bitmap: Bitmap) : Painter() {
     init {
         paint.style = Paint.Style.FILL_AND_STROKE
         needlePath.fillType = Path.FillType.EVEN_ODD
-        tryColor()
+        pickColor()
     }
 
     fun getColor() = color
@@ -95,12 +95,12 @@ class PipettePainter(private val bitmap: Bitmap) : Painter() {
     private fun onMove(event: MotionEvent) {
         pointer.x = event.getX(event.actionIndex)
         pointer.y = event.getY(event.actionIndex)
-        tryColor()
+        pickColor()
         requestInvalidate()
     }
 
-    private fun tryColor() {
-        if (pointer.x in 0..bitmap.width - 1 && pointer.y in 0..bitmap.height - 1) {
+    private fun pickColor() {
+        if (pointer.x in 0 until bitmap.width && pointer.y in 0 until bitmap.height) {
             color = bitmap.getPixel(pointer.x.toInt(), pointer.y.toInt())
         }
     }

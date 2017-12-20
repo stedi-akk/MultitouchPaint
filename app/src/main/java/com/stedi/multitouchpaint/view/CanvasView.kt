@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import com.stedi.multitouchpaint.App
 import com.stedi.multitouchpaint.data.Brush
 import com.stedi.multitouchpaint.painters.Painter
 
@@ -71,8 +72,8 @@ class CanvasView : View {
 
     fun isDrawing() = painter.isDrawing()
 
-    fun generatePicture(): Bitmap {
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    fun getPicture(): Bitmap {
+        val bitmap = Bitmap.createBitmap(width, height, App.BITMAP_CONFIG)
         draw(Canvas(bitmap))
         return bitmap
     }

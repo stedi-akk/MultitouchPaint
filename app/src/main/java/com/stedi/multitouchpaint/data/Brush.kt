@@ -19,5 +19,5 @@ data class Brush(private var thicknessDp: Int, var color: Int) : Serializable {
 
     fun getThicknessPx() = thicknessPx
 
-    fun getThicknessText() = "$thicknessDp${App.thicknessSufix}"
+    fun getThicknessText() = "$thicknessDp${App.THICKNESS_SUFIX}"
 }

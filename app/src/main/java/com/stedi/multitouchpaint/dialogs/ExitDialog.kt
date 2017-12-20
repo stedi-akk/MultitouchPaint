@@ -19,7 +19,7 @@ class ExitDialog : BaseDialog() {
     @OnClick(R.id.done, R.id.cancel)
     fun onButtonsClick(v: View) {
         if (v.id == R.id.done) {
-            App.getBus().post(Callback())
+            App.BUS.post(Callback())
         }
         dismiss()
     }

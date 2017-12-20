@@ -19,7 +19,7 @@ class FileWorkDialog : BaseDialog() {
         val root = inflater.inflate(R.layout.file_work_dialog, container, false)
         Callback.values().forEach { callback ->
             root.findViewById<View>(callback.buttonResId).setOnClickListener {
-                App.getBus().post(callback)
+                App.BUS.post(callback)
                 dismiss()
             }
         }

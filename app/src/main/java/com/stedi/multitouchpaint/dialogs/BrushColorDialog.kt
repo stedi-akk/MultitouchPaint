@@ -40,7 +40,7 @@ class BrushColorDialog : BaseDialog(), ColorPickerView.OnColorChangedListener {
         val root = butterKnifeInflate(inflater, R.layout.brush_color_dialog, container)
 
         val argsBrush = arguments.getSerializable(KEY_BRUSH) as Brush?
-        brush = argsBrush?.copy() ?: App.getDefaultBrush()
+        brush = argsBrush?.copy() ?: App.newDefaultBrush()
 
         colorFrom.color = brush.color
         colorTo.color = brush.color
@@ -55,7 +55,7 @@ class BrushColorDialog : BaseDialog(), ColorPickerView.OnColorChangedListener {
     fun onButtonsClick(v: View) {
         if (v.id == R.id.done) {
             brush.color = colorTo.color
-            App.getBus().post(brush)
+            App.BUS.post(brush)
         }
         dismiss()
     }

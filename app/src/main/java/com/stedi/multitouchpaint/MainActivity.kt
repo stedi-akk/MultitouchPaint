@@ -38,10 +38,10 @@ class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App.getBus().register(this)
+        App.BUS.register(this)
         setContentView(R.layout.main_activity)
         ButterKnife.bind(this)
-        brush = savedInstanceState?.getSerializable(KEY_BRUSH) as Brush? ?: App.getDefaultBrush()
+        brush = savedInstanceState?.getSerializable(KEY_BRUSH) as Brush? ?: App.newDefaultBrush()
         canvasView.setBrush(brush)
         canvasView.setPainter(PathPainter)
         workPanel.setBrush(brush)
@@ -64,7 +64,7 @@ class MainActivity : Activity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        App.getBus().unregister(this)
+        App.BUS.unregister(this)
     }
 
     override fun onBackPressed() {
@@ -110,7 +110,7 @@ class MainActivity : Activity() {
         when (callback) {
             WorkPanel.Callback.ON_FILE_WORK_CLICK -> FileWorkDialog().show(fragmentManager, FileWorkDialog::class.java.name)
             WorkPanel.Callback.ON_PIPETTE_CLICK -> {
-                canvasView.setPainter(PipettePainter(canvasView.generatePicture()))
+                canvasView.setPainter(PipettePainter(canvasView.getPicture()))
                 workPanel.hide()
             }
             WorkPanel.Callback.ON_COLOR_CLICK -> BrushColorDialog.newInstance(brush).show(fragmentManager, BrushColorDialog::class.java.name)
@@ -164,7 +164,7 @@ class MainActivity : Activity() {
 
     private fun saveCanvasViewImage() {
         WaitDialog.show(fragmentManager)
-        BitmapSaver(canvasView.generatePicture()).start()
+        BitmapSaver(canvasView.getPicture()).start()
     }
 
     private fun startPickImageIntent() {
@@ -188,7 +188,7 @@ class MainActivity : Activity() {
         val painter = canvasView.getPainter()
         if (painter is PipettePainter) {
             if (!painter.isDrawing()) {
-                App.getBus().post(brush.copy(color = painter.getColor()))
+                App.BUS.post(brush.copy(color = painter.getColor()))
                 canvasView.setPainter(PathPainter)
                 workPanel.show()
             }
