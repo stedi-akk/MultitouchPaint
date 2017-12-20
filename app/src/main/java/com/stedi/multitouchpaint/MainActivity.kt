@@ -88,8 +88,8 @@ class MainActivity : Activity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        if (resultCode == RESULT_OK && requestCode == REQUEST_GET_IMAGE) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_GET_IMAGE && data != null) {
             WaitDialog.show(fragmentManager)
             BitmapGetter(data.data, canvasView.width, canvasView.height).start()
         }
