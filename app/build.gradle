@@ -10,8 +10,8 @@ android {
         applicationId "com.stedi.multitouchpaint"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 7
-        versionName "2.5"
+        versionCode 8
+        versionName "2.6"
         manifestPlaceholders = [crashlyticsKey: getLocalProperty("crashlyticsKey")]
     }
 
@@ -41,7 +41,8 @@ android {
         }
         release {
             ext.enableCrashlytics = true
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
